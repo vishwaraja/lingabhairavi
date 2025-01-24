@@ -9,13 +9,18 @@
 <body>
 <div class="container">
     <!-- Background image -->
-    <img src="lingabhairavi.jpg" alt="Background Image" class="background-image">
+    <img src="lingabhairaavi.jpg" alt="Background Image" class="background-image">
 
-    <!-- Audio loop -->
-    <audio autoplay loop>
-        <source src="1LumVum.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
+    <!-- Button to trigger the audio play -->
+    <button onclick="playAudio()">Play Audio</button>
+
+    <!-- Audio will be played using JavaScript -->
+    <script>
+        function playAudio() {
+            var audio = new Audio('1LumVum.mp3');  <!-- Using the local path -->
+            audio.play();
+        }
+    </script>
 </div>
 </body>
 </html>
