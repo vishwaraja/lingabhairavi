@@ -9,16 +9,15 @@
 <body>
 <div class="container">
     <!-- Background image -->
-    <img src="lingabhairaavi.jpg" alt="Background Image" class="background-image">
+    <img src="lingabhairavi.jpg" alt="Background Image" class="background-image">
 
-    <!-- Button to trigger the audio play -->
-    <button onclick="playAudio()">Play Audio</button>
-
-    <!-- Audio will be played using JavaScript -->
+    <!-- Audio will play automatically when the page loads -->
     <script>
-        function playAudio() {
-            var audio = new Audio('1LumVum.mp3');  <!-- Using the local path -->
-            audio.play();
+        // This will play the audio automatically when the page loads
+        window.onload = function() {
+            var audio = new Audio('1LumVum.mp3');  // Using the local path
+            audio.loop = true;  // Set the audio to loop
+            audio.play();  // Play the audio automatically
         }
     </script>
 </div>
