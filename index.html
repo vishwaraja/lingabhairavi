@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image and Audio Loop</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="container">
     <!-- Background image -->
     <img src="lingabhairavi.jpg" alt="Background Image" class="background-image">
 
-    <!-- Audio will play automatically when the page loads -->
+    <!-- Instructions to click to start audio -->
+    <p>Click anywhere on the page to start the audio</p>
+
+    <!-- Audio will be played using JavaScript -->
     <script>
-        // This will play the audio automatically when the page loads
-        window.onload = function() {
-            var audio = new Audio('1LumVum.mp3');  // Using the local path
+        // Add an event listener to play audio when the user clicks anywhere on the page
+        window.onclick = function() {
+            var audio = new Audio('1LumVum.mp3'); // Using the local path
             audio.loop = true;  // Set the audio to loop
-            audio.play();  // Play the audio automatically
+            audio.play();  // Play the audio when the user clicks
         }
     </script>
 </div>
