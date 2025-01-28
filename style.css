@@ -20,4 +20,24 @@ html, body {
     background-size: contain; /* Ensure the image is scaled without being cropped */
 }
 
+/* Positioning the Comments link in the top right */
+.comments-link {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: 'Calibri', sans-serif; /* Calibri font */
+    font-size: 13px; /* Slightly smaller font size */
+    color: white; /* White font */
+    text-decoration: none; /* Remove underline */
+    background-color: transparent; /* Transparent background */
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.comments-link:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Light background on hover for better visibility */
+}
+
+
+
 /* The audio is now played automatically */
