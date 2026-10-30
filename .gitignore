@@ -1,2 +1,6 @@
 .vercel
 .DS_Store
+moodboard/
+research/*/raw/
+research/*/shots/
+research/*/img/

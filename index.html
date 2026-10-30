@@ -51,11 +51,6 @@ h2 { font: 600 clamp(28px, 3.6vw, 40px)/1.1 var(--serif); margin: 0 0 6px }
 .name b { font: 500 12px/1 var(--sans); color: var(--gold); min-width: 2ch; letter-spacing: .05em }
 
 /* gallery */
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(200px, 46%), 1fr)); gap: 14px }
-.tile { position: relative; border: 0; padding: 0; background: none; cursor: zoom-in; border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px var(--line) }
-.tile img { width: 100%; aspect-ratio: 1440/1801; object-fit: cover; display: block; transition: transform .4s }
-.tile:hover img { transform: scale(1.03) }
-.tile span { position: absolute; left: 8px; bottom: 8px; font: 500 12px/1 var(--sans); background: rgba(18,7,6,.78); color: var(--gold); padding: 5px 8px; border-radius: 999px }
 
 footer { padding-block: 40px 56px; color: var(--faint); font-size: 14px; border-top: 1px solid var(--line); margin-top: 24px }
 
@@ -102,13 +97,6 @@ footer { padding-block: 40px 56px; color: var(--faint); font-size: 14px; border-
     <div class="names" id="nameList"></div>
   </section>
 
-  <div class="divider"></div>
-  <section id="slides">
-    <h2>All slides</h2>
-    <p class="note">Tap any slide to read. Arrow keys or swipe to move; Esc to close.</p>
-    <div class="grid" id="grid"></div>
-  </section>
-
   <footer>
     Artwork and text by <a href="https://www.instagram.com/akash_ram76/">@akash_ram76</a>, from
     <a href="https://www.instagram.com/p/DfA_ljrEvAB/">this Instagram post</a>. Shared here for personal devotion and reading only.
@@ -142,13 +130,6 @@ NAMES.forEach((n, i) => {
   const b = document.createElement("button");
   b.className = "name"; b.innerHTML = `<b>${i + 1}</b>${n}`; b.dataset.open = slideOf(i);
   list.append(b);
-});
-const grid = document.getElementById("grid");
-TITLES.forEach((t, i) => {
-  const b = document.createElement("button");
-  b.className = "tile"; b.dataset.open = i; b.setAttribute("aria-label", `Slide ${i + 1}: ${t}`);
-  b.innerHTML = `<img loading="lazy" src="img/thumb/${pad(i)}.jpg" alt="Slide ${i + 1}: ${t}" width="480" height="600"><span>${i + 1}/20</span>`;
-  grid.append(b);
 });
 
 const R = document.getElementById("reader"), img = document.getElementById("rImg"), dots = document.getElementById("dots");
