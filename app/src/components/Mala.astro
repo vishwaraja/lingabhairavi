@@ -1,0 +1,59 @@
+---
+import { t, type Lang } from '../i18n/ui';
+const { lang } = Astro.props as { lang: Lang };
+const tr = t(lang);
+---
+<section class="mala card" data-mala aria-labelledby="mala-h">
+  <h2 id="mala-h">{tr('mala.title')}</h2>
+  <button type="button" class="bead" data-mala-tap aria-describedby="mala-status">
+    <span class="count" data-mala-count>0</span>
+    <span class="of">/ 108</span>
+    <span class="visually-hidden">{tr('mala.tap')}</span>
+  </button>
+  <p class="muted small">{tr('mala.tap')}</p>
+  <p id="mala-status" class="small" aria-live="polite">
+    {tr('mala.rounds')}: <span data-mala-rounds>0</span>
+    <span data-mala-done hidden> · {tr('mala.done')}</span>
+  </p>
+  <button type="button" data-mala-reset>{tr('mala.reset')}</button>
+</section>
+
+<style>
+  .mala { text-align: center; display: grid; justify-items: center; gap: var(--space-1); }
+  .mala h2 { margin-top: 0; }
+  .bead {
+    width: min(70vw, 16rem); aspect-ratio: 1; border-radius: 50%;
+    display: grid; place-content: center; gap: 0;
+    border: 3px solid var(--accent); background: radial-gradient(circle at 40% 35%, var(--bg-raised), var(--bg));
+    touch-action: manipulation; user-select: none; -webkit-user-select: none;
+    transition: transform 120ms var(--ease);
+  }
+  .bead:active { transform: scale(0.97); }
+  .count { font-size: 3.5rem; line-height: 1; font-variant-numeric: tabular-nums; color: var(--ink); }
+  .of { color: var(--ink-soft); font-size: var(--fs-small); }
+</style>
+
+<script>
+  const KEY = 'lb.mala';
+  for (const root of document.querySelectorAll<HTMLElement>('[data-mala]')) {
+    const $ = (s: string) => root.querySelector<HTMLElement>(s)!;
+    const countEl = $('[data-mala-count]'), roundsEl = $('[data-mala-rounds]'), doneEl = $('[data-mala-done]');
+    let state = { count: 0, rounds: 0 };
+    try { state = { ...state, ...JSON.parse(localStorage.getItem(KEY) ?? '{}') }; } catch {}
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+    const render = (justDone = false) => {
+      countEl.textContent = String(state.count);
+      roundsEl.textContent = String(state.rounds);
+      doneEl.hidden = !justDone;
+    };
+    $('[data-mala-tap]').addEventListener('click', () => {
+      state.count += 1;
+      let done = false;
+      if (state.count >= 108) { state.count = 0; state.rounds += 1; done = true; navigator.vibrate?.([80, 60, 80]); }
+      else navigator.vibrate?.(12);
+      save(); render(done);
+    });
+    $('[data-mala-reset]').addEventListener('click', () => { state = { count: 0, rounds: 0 }; save(); render(); });
+    render();
+  }
+</script>

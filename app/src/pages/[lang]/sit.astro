@@ -1,0 +1,15 @@
+---
+import Base from '../../layouts/Base.astro';
+import Lamp from '../../components/Lamp.astro';
+import Mala from '../../components/Mala.astro';
+import { t, getStaticLangPaths, type Lang } from '../../i18n/ui';
+export const getStaticPaths = getStaticLangPaths;
+const lang = Astro.params.lang as Lang;
+const tr = t(lang);
+---
+<Base lang={lang} title={tr('sit.title')}>
+  <h1>{tr('sit.title')}</h1>
+  <p>{tr('sit.intro')}</p>
+  <Lamp lang={lang} />
+  <Mala lang={lang} />
+</Base>

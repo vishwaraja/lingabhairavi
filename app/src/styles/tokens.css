@@ -1,0 +1,46 @@
+/* ============================================================
+   DESIGN TOKENS: the ONLY file the chosen design needs to replace.
+   Neutral placeholder values ("temple at night", dark, warm).
+   Contrast: --ink on --bg = 15.9:1, --ink-soft on --bg = 8.6:1,
+   --accent on --bg = 8.5:1, --accent-ink on --accent = 8.6:1 (all >= WCAG AAA 7:1 for body).
+   ============================================================ */
+:root {
+  color-scheme: dark;
+
+  /* colour */
+  --bg: #14100e;
+  --bg-raised: #1f1915;
+  --ink: #f2ead9;
+  --ink-soft: #c8bba4;
+  --accent: #e2b86b;
+  --accent-ink: #14100e;
+  --line: #4a3d31;
+  --focus: #ffd98a;
+  --flame: #ffb347;
+
+  /* type: system stack for Latin, self-hosted Noto Serif Tamil for Tamil glyphs */
+  --font-body: var(--font-tamil, serif), ui-serif, Georgia, 'Times New Roman', serif;
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, var(--font-tamil, sans-serif), sans-serif;
+  --fs-body: 1.1875rem;   /* 19 px, never below 18 px */
+  --fs-small: 1.125rem;   /* 18 px floor */
+  --fs-h1: clamp(2rem, 1.4rem + 3vw, 3rem);
+  --fs-h2: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+  --lh-body: 1.7;
+  --lh-tamil: 1.9;        /* Tamil vowel signs need extra line height */
+
+  /* space & shape */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --measure: 38rem;
+  --radius: 0.75rem;
+  --tap: 3rem;            /* 48 px minimum tap target */
+
+  /* motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur: 400ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0ms; }
+}

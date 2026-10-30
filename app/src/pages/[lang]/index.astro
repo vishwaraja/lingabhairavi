@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import NameOfDay from '../../components/NameOfDay.astro';
+import Lamp from '../../components/Lamp.astro';
+import Photo from '../../components/Photo.astro';
+import hero from '../../assets/placeholder-hero.jpg';
+import { t, getStaticLangPaths, type Lang } from '../../i18n/ui';
+import { usingFixtures } from '../../content.config';
+export const getStaticPaths = getStaticLangPaths;
+const lang = Astro.params.lang as Lang;
+const tr = t(lang);
+---
+<Base lang={lang}>
+  <h1>{tr('site.title')}</h1>
+  <p class="muted">{tr('site.tagline')}</p>
+  <Photo src={hero} alt="Placeholder image" priority />
+  {usingFixtures.names && <p class="notice small">{tr('fixture.names')}</p>}
+  <NameOfDay lang={lang} />
+  <Lamp lang={lang} />
+  <p><a class="button" href={`/${lang}/names/`}>{tr('nav.names')}</a> <a class="button" href={`/${lang}/sit/`}>{tr('nav.sit')}</a></p>
+</Base>

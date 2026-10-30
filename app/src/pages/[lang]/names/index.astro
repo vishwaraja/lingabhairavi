@@ -1,0 +1,32 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { t, getStaticLangPaths, type Lang } from '../../../i18n/ui';
+import { getNames } from '../../../lib/names';
+import { usingFixtures } from '../../../content.config';
+export const getStaticPaths = getStaticLangPaths;
+const lang = Astro.params.lang as Lang;
+const tr = t(lang);
+const names = await getNames();
+---
+<Base lang={lang} title={tr('names.title')}>
+  <h1>{tr('names.title')}</h1>
+  {usingFixtures.names && <p class="notice small">{tr('fixture.names')}</p>}
+  <ol class="names" role="list">
+    {names.map((n) => (
+      <li>
+        <a href={`/${lang}/names/${n.id}/`}>
+          <span class="num">{n.data.number}</span>
+          <span class="en" lang="en">{n.data.name}</span>
+          {n.data.tamil && <span class="ta" lang="ta">{n.data.tamil}</span>}
+        </a>
+      </li>
+    ))}
+  </ol>
+</Base>
+<style>
+  .names { list-style: none; padding: 0; margin: 0; }
+  .names li { border-bottom: 1px solid var(--line); }
+  .names a { display: grid; grid-template-columns: 2.5rem 1fr; column-gap: var(--space-1); padding: var(--space-2) 0; text-decoration: none; color: var(--ink); min-height: var(--tap); }
+  .num { grid-row: span 2; color: var(--accent); font-family: var(--font-ui); }
+  .ta { color: var(--ink-soft); }
+</style>

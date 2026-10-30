@@ -1,0 +1,52 @@
+---
+import { t, type Lang } from '../i18n/ui';
+const { lang } = Astro.props as { lang: Lang };
+const tr = t(lang);
+---
+<section class="lamp card" data-lamp data-lang={lang}>
+  <div class="flame-wrap" aria-hidden="true">
+    <svg viewBox="0 0 64 96" width="64" height="96">
+      <path class="flame" d="M32 8c10 18 16 28 16 40a16 16 0 0 1-32 0c0-12 6-22 16-40z" />
+      <rect x="14" y="70" width="36" height="10" rx="5" class="base" />
+    </svg>
+  </div>
+  <button type="button" class="primary" aria-pressed="false" data-lamp-btn data-on={tr('lamp.lit')} data-off={tr('lamp.light')}>
+    {tr('lamp.light')}
+  </button>
+  <p class="muted small" data-lamp-last data-label={tr('lamp.last')} data-never={tr('lamp.never')}>{tr('lamp.never')}</p>
+</section>
+
+<style>
+  .lamp { display: grid; justify-items: center; gap: var(--space-2); text-align: center; }
+  .flame { fill: var(--line); transition: fill var(--dur) var(--ease), filter var(--dur) var(--ease); transform-origin: 50% 80%; }
+  .base { fill: var(--ink-soft); }
+  .lamp[data-lit] .flame { fill: var(--flame); filter: drop-shadow(0 0 10px var(--flame)); animation: flicker 2.4s ease-in-out infinite alternate; }
+  @keyframes flicker { from { transform: scale(1) } to { transform: scale(1.04, 0.97) } }
+  @media (prefers-reduced-motion: reduce) { .lamp[data-lit] .flame { animation: none; } }
+</style>
+
+<script>
+  import { istDate } from '../lib/day';
+  const KEY = 'lb.lamp.lastLit';
+  for (const root of document.querySelectorAll<HTMLElement>('[data-lamp]')) {
+    const btn = root.querySelector<HTMLButtonElement>('[data-lamp-btn]')!;
+    const last = root.querySelector<HTMLElement>('[data-lamp-last]')!;
+    const locale = root.dataset.lang === 'ta' ? 'ta-IN' : 'en-IN';
+    const render = () => {
+      const v = localStorage.getItem(KEY);
+      const litToday = v === istDate();
+      root.toggleAttribute('data-lit', litToday);
+      btn.setAttribute('aria-pressed', String(litToday));
+      btn.textContent = litToday ? btn.dataset.on! : btn.dataset.off!;
+      last.textContent = v
+        ? `${last.dataset.label}: ${new Date(v + 'T12:00:00+05:30').toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' })}`
+        : last.dataset.never!;
+    };
+    btn.addEventListener('click', () => {
+      try { localStorage.setItem(KEY, istDate()); } catch {}
+      navigator.vibrate?.(20);
+      render();
+    });
+    render();
+  }
+</script>

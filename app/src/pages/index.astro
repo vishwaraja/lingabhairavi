@@ -1,0 +1,18 @@
+---
+// Root: big two-button language choice. Returning visitors are sent straight to their last language.
+import Base from '../layouts/Base.astro';
+---
+<Base lang="en">
+  <script is:inline>
+    try { var l = localStorage.getItem('lb.lang'); if (l === 'en' || l === 'ta') location.replace('/' + l + '/'); } catch (e) {}
+  </script>
+  <h1>Linga Bhairavi · <span lang="ta">லிங்க பைரவி</span></h1>
+  <p class="choose">
+    <a class="button primary" href="/en/" hreflang="en">English</a>
+    <a class="button primary" href="/ta/" hreflang="ta" lang="ta">தமிழ்</a>
+  </p>
+</Base>
+<style>
+  .choose { display: grid; gap: var(--space-2); max-width: 20rem; }
+  .choose .button { font-size: 1.375rem; min-height: 4rem; }
+</style>

@@ -1,0 +1,40 @@
+---
+import { t, type Lang } from '../i18n/ui';
+import { getNames } from '../lib/names';
+import { nameIndexForDay } from '../lib/day';
+const { lang } = Astro.props as { lang: Lang };
+const tr = t(lang);
+const names = (await getNames()).map((n) => ({ slug: n.id, number: n.data.number, name: n.data.name, tamil: n.data.tamil ?? '' }));
+// Server-render the build-day's pick (no layout shift, works without JS); the script corrects it to today's IST date.
+const initial = names[nameIndexForDay(names.length)];
+---
+<section class="nod card" data-nod data-lang={lang} data-names={JSON.stringify(names)} aria-labelledby="nod-h">
+  <h2 id="nod-h">{tr('home.today')}</h2>
+  <a class="nod-link" href={`/${lang}/names/${initial.slug}/`} data-nod-link>
+    <span class="num" data-nod-num>{initial.number}</span>
+    <span class="en" lang="en" data-nod-en>{initial.name}</span>
+    <span class="ta" lang="ta" data-nod-ta>{initial.tamil}</span>
+  </a>
+  <p class="muted small">{tr('home.today.hint')}</p>
+</section>
+
+<style>
+  .nod h2 { margin-top: 0; }
+  .nod-link { display: grid; gap: .25rem; text-decoration: none; color: var(--ink); padding: var(--space-1) 0; }
+  .num { color: var(--accent); font-family: var(--font-ui); }
+  .en { font-size: var(--fs-h2); font-weight: 600; }
+  .ta { font-size: 1.375rem; color: var(--ink-soft); }
+</style>
+
+<script>
+  import { nameIndexForDay } from '../lib/day';
+  for (const root of document.querySelectorAll<HTMLElement>('[data-nod]')) {
+    const names = JSON.parse(root.dataset.names!) as { slug: string; number: number; name: string; tamil: string }[];
+    const n = names[nameIndexForDay(names.length)];
+    const q = (s: string) => root.querySelector<HTMLElement>(s)!;
+    (q('[data-nod-link]') as HTMLAnchorElement).href = `/${root.dataset.lang}/names/${n.slug}/`;
+    q('[data-nod-num]').textContent = String(n.number);
+    q('[data-nod-en]').textContent = n.name;
+    q('[data-nod-ta]').textContent = n.tamil;
+  }
+</script>

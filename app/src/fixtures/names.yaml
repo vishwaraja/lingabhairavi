@@ -1,0 +1,35 @@
+# FIXTURE ONLY: 3 placeholder entries in the same shape as ../content/names.yaml.
+# Used automatically when ../content/names.yaml does not exist.
+names:
+  - number: 1
+    roman_official: "Placeholder One"
+    simple: "Placeholder One"
+    iast: "Placeholder One"
+    devanagari: "नाम एकम्"
+    tamil: "பெயர் ஒன்று"
+    chant: "Jai Bhairavi Devi Placeholder One Namah Shri"
+    meaning: "Placeholder meaning."
+    tamil_meaning: "மாதிரி பொருள்."
+    reflection: "Placeholder reflection."
+    sources: ["https://example.org/"]
+    confidence_text: fixture
+    confidence_meaning: fixture
+  - number: 2
+    roman_official: "Placeholder Two"
+    simple: "Placeholder Two"
+    devanagari: "नाम द्वितीयम्"
+    tamil: "பெயர் இரண்டு"
+    chant: "Jai Bhairavi Devi Placeholder Two Namah Shri"
+    meaning: "Placeholder meaning two."
+    reflection: "Placeholder reflection two."
+    sources: []
+  - number: 3
+    roman_official: "Placeholder Three"
+    simple: "Placeholder Three"
+    devanagari: "नाम तृतीयम्"
+    tamil: "பெயர் மூன்று"
+    chant: "Jai Bhairavi Devi Placeholder Three Namah Shri"
+    meaning: "Placeholder meaning three."
+    tamil_meaning: "மாதிரி பொருள் மூன்று."
+    reflection: "Placeholder reflection three."
+    sources: ["https://example.org/"]

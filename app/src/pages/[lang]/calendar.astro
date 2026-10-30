@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { t, loc, getStaticLangPaths, type Lang } from '../../i18n/ui';
+import { usingFixtures } from '../../content.config';
+export const getStaticPaths = getStaticLangPaths;
+const lang = Astro.params.lang as Lang;
+const tr = t(lang);
+const events = (await getCollection('calendar')).map((e) => e.data).sort((a, b) => a.date.localeCompare(b.date));
+const fmt = (iso: string) =>
+  new Date(`${iso}T12:00:00+05:30`).toLocaleDateString(lang === 'ta' ? 'ta-IN' : 'en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' });
+---
+<Base lang={lang} title={tr('cal.title')}>
+  <h1>{tr('cal.title')}</h1>
+  <p>{tr('cal.intro')}</p>
+  {usingFixtures.calendar && <p class="notice small">{tr('cal.fixture')}</p>}
+  <h2>{tr('cal.upcoming')}</h2>
+  <ul class="events" role="list" data-events>
+    {events.map((e) => (
+      <li data-date={e.end ?? e.date} class={`type-${e.type}`}>
+        <span class="title">{loc(e.title, lang) ?? e.type}</span>
+        <time datetime={e.date}>{fmt(e.date)}{e.end && <> – {fmt(e.end)}</>}</time>
+      </li>
+    ))}
+  </ul>
+</Base>
+<style>
+  .events { list-style: none; padding: 0; }
+  .events li { display: grid; padding: var(--space-2) 0; border-bottom: 1px solid var(--line); }
+  .title { font-weight: 600; }
+  time { color: var(--ink-soft); }
+</style>
+<script>
+  // Hide past events on the client (static page; build date may be old).
+  import { istDate } from '../../lib/day';
+  const today = istDate();
+  document.querySelectorAll<HTMLElement>('[data-events] li').forEach((li) => { if (li.dataset.date! < today) li.hidden = true; });
+</script>

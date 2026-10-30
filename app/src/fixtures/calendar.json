@@ -1,0 +1,11 @@
+{
+  "_note": "FIXTURE ONLY. Real data comes from ../content/calendar.json (another agent). Dates are illustrative, not verified tithis.",
+  "timezone": "Asia/Kolkata",
+  "events": [
+    { "date": "2026-11-09", "type": "amavasya", "title": { "en": "Amavasya (fixture)", "ta": "அமாவாசை (மாதிரி)" } },
+    { "date": "2026-11-24", "type": "pournami", "title": { "en": "Pournami (fixture)", "ta": "பௌர்ணமி (மாதிரி)" } },
+    { "date": "2026-12-09", "type": "amavasya", "title": { "en": "Amavasya (fixture)", "ta": "அமாவாசை (மாதிரி)" } },
+    { "date": "2026-12-24", "type": "pournami", "title": { "en": "Pournami (fixture)", "ta": "பௌர்ணமி (மாதிரி)" } },
+    { "date": "2027-10-01", "end": "2027-10-09", "type": "navaratri", "title": { "en": "Navaratri (fixture)", "ta": "நவராத்திரி (மாதிரி)" } }
+  ]
+}

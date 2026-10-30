@@ -1,0 +1,100 @@
+---
+import { Font } from 'astro:assets';
+import { pwaInfo } from 'virtual:pwa-info';
+import '../styles/global.css';
+import { t, switchPath, otherLang, languages, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** absolute or root-relative path to a 1200x630 PNG */
+  ogImage?: string;
+}
+const { lang, title, description, ogImage = '/og/default.png' } = Astro.props;
+const tr = t(lang);
+const path = Astro.url.pathname;
+const site = Astro.site!;
+const fullTitle = title ? `${title} · ${tr('site.title')}` : tr('site.title');
+const desc = description ?? tr('site.tagline');
+const canonical = new URL(path, site).href;
+const other = otherLang(lang);
+const nav = [
+  { href: `/${lang}/`, label: tr('nav.home') },
+  { href: `/${lang}/names/`, label: tr('nav.names') },
+  { href: `/${lang}/sit/`, label: tr('nav.sit') },
+  { href: `/${lang}/calendar/`, label: tr('nav.calendar') },
+];
+---
+<!doctype html>
+<html lang={lang === 'ta' ? 'ta' : 'en'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <link rel="canonical" href={canonical} />
+    {Object.keys(languages).map((l) => <link rel="alternate" hreflang={l} href={new URL(switchPath(path, l as Lang), site).href} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(switchPath(path, 'en'), site).href} />
+    <meta name="theme-color" content="#14100e" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <Fragment set:html={pwaInfo?.webManifest.linkTag} />
+    <Font cssVariable="--font-tamil" preload={lang === 'ta' ? [{ weight: 400 }] : false} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={tr('site.title')} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, site).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={lang === 'ta' ? 'ta_IN' : 'en_IN'} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a class="skip" href="#main">{tr('nav.skip')}</a>
+    <header class="site-header">
+      <div class="wrap bar">
+        <a class="brand" href={`/${lang}/`}>{tr('site.title')}</a>
+        <a class="lang" href={switchPath(path, other)} hreflang={other} lang={other}>{tr('nav.lang')}</a>
+      </div>
+      <nav class="wrap" aria-label="Main">
+        <ul>
+          {nav.map((n) => <li><a href={n.href} aria-current={path === n.href ? 'page' : undefined}>{n.label}</a></li>)}
+        </ul>
+      </nav>
+    </header>
+    <main id="main" class="wrap">
+      <slot />
+    </main>
+    <footer class="wrap muted small">
+      <p>{tr('footer.note')}</p>
+      <p id="offline-ready" hidden>{tr('offline.ready')}</p>
+    </footer>
+    <script is:inline define:vars={{ lang }}>
+      try { if (location.pathname !== '/') localStorage.setItem('lb.lang', lang); } catch (e) {}
+    </script>
+    <script>
+      import { registerSW } from 'virtual:pwa-register';
+      registerSW({
+        immediate: true,
+        onOfflineReady() {
+          document.getElementById('offline-ready')?.removeAttribute('hidden');
+        },
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  .site-header { border-bottom: 1px solid var(--line); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); min-height: 3.5rem; }
+  .brand { font-weight: 600; font-size: 1.25rem; color: var(--ink); text-decoration: none; }
+  .lang { font-family: var(--font-ui); display: inline-flex; align-items: center; min-height: var(--tap); padding-inline: var(--space-2); border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; }
+  nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0 var(--space-2); padding: 0; margin: 0 0 var(--space-1); }
+  nav a { display: inline-flex; align-items: center; min-height: var(--tap); font-family: var(--font-ui); }
+  nav a[aria-current='page'] { color: var(--ink); text-decoration-thickness: 3px; }
+  footer { margin-top: var(--space-4); padding-block: var(--space-3); border-top: 1px solid var(--line); }
+</style>

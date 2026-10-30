@@ -1,0 +1,69 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { t, loc, languages, type Lang } from '../../../i18n/ui';
+import { getNames, type NameEntry } from '../../../lib/names';
+
+export async function getStaticPaths() {
+  const names = await getNames();
+  return (Object.keys(languages) as Lang[]).flatMap((lang) =>
+    names.map((entry, i) => ({
+      params: { lang, slug: entry.id },
+      props: { entry, prev: names[i - 1] ?? null, next: names[i + 1] ?? null },
+    })),
+  );
+}
+interface Props { entry: NameEntry; prev: NameEntry | null; next: NameEntry | null }
+const { entry, prev, next } = Astro.props;
+const lang = Astro.params.lang as Lang;
+const tr = t(lang);
+const d = entry.data;
+const meaning = loc(d.meaning, lang);
+const reflection = loc(d.reflection, lang);
+const chant = loc(d.chant, lang);
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const prettyUrl = (u: string) => { const x = new URL(u); return `${x.hostname.replace(/^www\./, '')}${x.pathname.length > 1 ? ' › ' + decodeURIComponent(x.pathname.split('/').filter(Boolean).pop()!) : ''}`; };
+const shareText = `${d.number}. ${d.name}${d.tamil ? ` · ${d.tamil}` : ''}\n${url}`;
+---
+<Base lang={lang} title={lang === 'ta' && d.tamil ? d.tamil : d.name} description={meaning} ogImage={`/og/${entry.id}.png`}>
+  <article>
+    <p class="num">{d.number} / 33</p>
+    <h1 lang="en">{d.name}</h1>
+    {d.tamil && <p class="ta" lang="ta">{d.tamil}</p>}
+    {d.devanagari && <p class="dev" lang="sa">{d.devanagari}</p>}
+
+    {chant && <section><h2>{tr('names.chant')}</h2><p class="chant">{chant}</p></section>}
+    {meaning && <section><h2>{tr('names.meaning')}</h2><p>{meaning}</p></section>}
+    {reflection && <section><h2>{tr('names.reflection')}</h2><p>{reflection}</p></section>}
+
+    <p><a class="button primary" href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} rel="noopener">{tr('names.share')}</a></p>
+
+    {d.sources.length > 0 && (
+      <section class="sources">
+        <h2>{tr('names.sources')}</h2>
+        <ul>
+          {d.sources.map((s) => {
+            const href = typeof s === 'string' ? (/^https?:/.test(s) ? s : undefined) : s.url;
+            const label = typeof s === 'string' ? (href ? prettyUrl(href) : s) : (s.title ?? (href && prettyUrl(href)));
+            return <li>{href ? <a href={href} rel="noopener">{label}</a> : label}</li>;
+          })}
+        </ul>
+      </section>
+    )}
+  </article>
+
+  <nav class="pager" aria-label={tr('names.all')}>
+    {prev ? <a rel="prev" href={`/${lang}/names/${prev.id}/`}>← {tr('names.prev')}</a> : <span />}
+    <a href={`/${lang}/names/`}>{tr('names.all')}</a>
+    {next ? <a rel="next" href={`/${lang}/names/${next.id}/`}>{tr('names.next')} →</a> : <span />}
+  </nav>
+</Base>
+<style>
+  .num { color: var(--accent); font-family: var(--font-ui); margin-bottom: 0; }
+  h1 { margin-top: var(--space-1); }
+  .ta { font-size: 1.75rem; font-weight: 600; margin: 0; }
+  .dev { font-size: 1.5rem; color: var(--ink-soft); }
+  .chant { font-size: 1.375rem; }
+  .sources a { overflow-wrap: anywhere; }
+  .pager { display: flex; justify-content: space-between; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-4); }
+  .pager a { display: inline-flex; align-items: center; min-height: var(--tap); font-family: var(--font-ui); }
+</style>
