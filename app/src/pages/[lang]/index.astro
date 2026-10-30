@@ -1,21 +1,28 @@
 ---
 import Base from '../../layouts/Base.astro';
 import NameOfDay from '../../components/NameOfDay.astro';
+import TodayWithDevi from '../../components/TodayWithDevi.astro';
+import HerForm from '../../components/HerForm.astro';
 import Lamp from '../../components/Lamp.astro';
-import Photo from '../../components/Photo.astro';
-import hero from '../../assets/placeholder-hero.jpg';
 import { t, getStaticLangPaths, type Lang } from '../../i18n/ui';
-import { usingFixtures } from '../../content.config';
 export const getStaticPaths = getStaticLangPaths;
 const lang = Astro.params.lang as Lang;
 const tr = t(lang);
+const tiles = ['names', 'chant', 'sit', 'calendar', 'visit', 'offerings', 'yantra', 'isha', 'my-story'] as const;
+const key = { names: 'nav.names', chant: 'nav.chant', sit: 'nav.sit', calendar: 'nav.calendar', visit: 'nav.visit', offerings: 'nav.offerings', yantra: 'nav.yantra', isha: 'nav.isha', 'my-story': 'nav.story' } as const;
 ---
 <Base lang={lang}>
   <h1>{tr('site.title')}</h1>
   <p class="muted">{tr('site.tagline')}</p>
-  <Photo src={hero} alt="Placeholder image" priority />
-  {usingFixtures.names && <p class="notice small">{tr('fixture.names')}</p>}
+  <HerForm lang={lang} priority />
+  <TodayWithDevi lang={lang} />
   <NameOfDay lang={lang} />
   <Lamp lang={lang} />
-  <p><a class="button" href={`/${lang}/names/`}>{tr('nav.names')}</a> <a class="button" href={`/${lang}/sit/`}>{tr('nav.sit')}</a></p>
+  <ul class="tiles" role="list">
+    {tiles.map((p) => <li><a class="button" href={`/${lang}/${p}/`}>{tr(key[p])}</a></li>)}
+  </ul>
 </Base>
+<style>
+  .tiles { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr)); gap: var(--space-1); }
+  .tiles .button { width: 100%; min-height: 3.5rem; }
+</style>

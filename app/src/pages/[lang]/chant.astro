@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import ChantPlayer from '../../components/ChantPlayer.astro';
+import CycleCounter from '../../components/CycleCounter.astro';
+import { t, getStaticLangPaths, type Lang } from '../../i18n/ui';
+import { getNames } from '../../lib/names';
+import { soundQuote, chant, STUTI_PAGE } from '../../lib/stuti';
+export const getStaticPaths = getStaticLangPaths;
+const lang = Astro.params.lang as Lang;
+const tr = t(lang);
+const names = await getNames();
+const line = (n: (typeof names)[number]) =>
+  lang === 'ta' && chant.lineTemplateTamil && n.data.tamil ? chant.lineTemplateTamil.replace('{name}', n.data.tamil) : n.data.chant;
+const closing = lang === 'ta' && chant.closing.tamil.length ? chant.closing.tamil : chant.closing.roman;
+---
+<Base lang={lang} title={tr('chant.title')}>
+  <h1>{tr('chant.title')}</h1>
+  <blockquote class="quote">
+    <p>“{soundQuote.text}”</p>
+    <footer class="small muted">— {tr('names.sound')}, <a href={soundQuote.source} rel="noopener">isha.sadhguru.org</a></footer>
+  </blockquote>
+  <ChantPlayer lang={lang} />
+  <CycleCounter lang={lang} />
+  <h2>{tr('chant.readAlong')}</h2>
+  <ol class="lines">
+    {names.map((n) => <li lang={lang === 'ta' ? 'ta' : 'en'}><a href={`/${lang}/names/${n.id}/`}>{line(n)}</a></li>)}
+  </ol>
+  <h3>{tr('chant.closing')}</h3>
+  {closing.map((c) => <p class="closing">{c}</p>)}
+  <p class="small"><a href={STUTI_PAGE} rel="noopener">{tr('chant.pdfs')}</a></p>
+</Base>
+<style>
+  .quote { margin: var(--space-3) 0; padding-left: var(--space-2); border-left: 3px solid var(--kumkum); font-size: 1.25rem; }
+  .quote p { margin: 0 0 var(--space-1); }
+  .lines { padding-left: 2.25rem; }
+  .lines li { padding: 0.35rem 0; }
+  .lines a { color: var(--ink); text-decoration: none; display: inline-block; min-height: var(--tap); padding-block: 0.4rem; }
+  .closing { margin: 0.25rem 0; }
+</style>

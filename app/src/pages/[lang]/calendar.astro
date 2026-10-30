@@ -14,10 +14,12 @@ const fmt = (iso: string) =>
   <h1>{tr('cal.title')}</h1>
   <p>{tr('cal.intro')}</p>
   {usingFixtures.calendar && <p class="notice small">{tr('cal.fixture')}</p>}
+  <p class="small muted">{tr('cal.source')}</p>
   <h2>{tr('cal.upcoming')}</h2>
   <ul class="events" role="list" data-events>
     {events.map((e) => (
       <li data-date={e.end ?? e.date} class={`type-${e.type}`}>
+        <span class="type small">{tr(`type.${e.type}` as any) ?? e.type}</span>
         <span class="title">{loc(e.title, lang) ?? e.type}</span>
         <time datetime={e.date}>{fmt(e.date)}{e.end && <> – {fmt(e.end)}</>}</time>
       </li>
@@ -28,6 +30,8 @@ const fmt = (iso: string) =>
   .events { list-style: none; padding: 0; }
   .events li { display: grid; padding: var(--space-2) 0; border-bottom: 1px solid var(--line); }
   .title { font-weight: 600; }
+  .type { color: var(--accent); font-family: var(--font-ui); }
+  .type-pournami { border-left: 3px solid var(--accent); padding-left: var(--space-1) !important; }
   time { color: var(--ink-soft); }
 </style>
 <script>

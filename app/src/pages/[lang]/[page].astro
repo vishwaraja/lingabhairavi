@@ -1,0 +1,37 @@
+---
+// visit / offerings / yantra, rendered from ../content/*.md
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { t, languages, type Lang } from '../../i18n/ui';
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  return (Object.keys(languages) as Lang[]).flatMap((lang) => pages.map((entry) => ({ params: { lang, page: entry.id }, props: { entry } })));
+}
+const { entry } = Astro.props as { entry: CollectionEntry<'pages'> };
+const lang = Astro.params.lang as Lang;
+const tr = t(lang);
+const { Content, headings } = await render(entry);
+const tamil = headings.find((h) => /[஀-௿]/.test(h.text));
+---
+<Base lang={lang} title={entry.data.title}>
+  {lang === 'ta' && tamil && <p class="notice"><a href={`#${tamil.slug}`} lang="ta">{tr('page.tamilSummary')} ↓</a></p>}
+  <article class="prose" lang="en"><Content /></article>
+  <aside class="small muted">
+    {entry.data.last_checked && <p>{tr('page.checked')}: {entry.data.last_checked}</p>}
+    {entry.data.sources.length > 0 && (
+      <details><summary>{tr('page.sources')} ({entry.data.sources.length})</summary>
+        <ul>{entry.data.sources.map((s) => <li><a href={s} rel="noopener">{s.replace(/^https?:\/\//, '')}</a></li>)}</ul>
+      </details>
+    )}
+  </aside>
+</Base>
+<style>
+  .prose :global(h2) { scroll-margin-top: 1rem; }
+  .prose :global(table) { display: block; overflow-x: auto; border-collapse: collapse; margin: var(--space-2) 0; }
+  .prose :global(th), .prose :global(td) { border: 1px solid var(--line); padding: 0.5rem 0.75rem; text-align: left; vertical-align: top; }
+  .prose :global(blockquote) { border-left: 3px solid var(--kumkum); margin: var(--space-2) 0; padding-left: var(--space-2); }
+  .prose :global(a) { overflow-wrap: anywhere; }
+  .prose :global(:lang(ta)), .prose :global(h2 ~ p) { }
+  aside a { overflow-wrap: anywhere; }
+  summary { min-height: var(--tap); display: flex; align-items: center; cursor: pointer; color: var(--accent); }
+</style>

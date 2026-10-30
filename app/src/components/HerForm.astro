@@ -1,0 +1,21 @@
+---
+// Neutral placeholder for Her form. No deity image until a photograph is chosen and cleared.
+import Photo from './Photo.astro';
+import glow from '../assets/placeholder-hero.jpg';
+import { t, type Lang } from '../i18n/ui';
+const { lang, priority = false } = Astro.props as { lang: Lang; priority?: boolean };
+---
+<figure class="her">
+  <Photo src={glow} alt="" priority={priority} sizes="(min-width: 44rem) 42rem, 100vw" />
+  <svg class="mark" viewBox="0 0 120 110" aria-hidden="true">
+    <path d="M60 8 L112 100 H8 Z" fill="none" stroke="currentColor" stroke-width="2" />
+    <path d="M60 52c6 10 9 15 9 21a9 9 0 0 1-18 0c0-6 3-11 9-21z" fill="var(--flame)" />
+  </svg>
+  <figcaption class="small muted">{t(lang)('form.placeholder')}</figcaption>
+</figure>
+<style>
+  .her { position: relative; margin: var(--space-3) 0; }
+  .her :global(img) { border-radius: var(--radius); width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+  .mark { position: absolute; left: 50%; top: 42%; width: 28%; translate: -50% -50%; color: var(--accent); opacity: 0.85; }
+  figcaption { margin-top: var(--space-1); text-align: center; }
+</style>

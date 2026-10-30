@@ -2,6 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import { t, loc, languages, type Lang } from '../../../i18n/ui';
 import { getNames, type NameEntry } from '../../../lib/names';
+import { soundQuote } from '../../../lib/stuti';
 
 export async function getStaticPaths() {
   const names = await getNames();
@@ -32,8 +33,19 @@ const shareText = `${d.number}. ${d.name}${d.tamil ? ` · ${d.tamil}` : ''}\n${u
     {d.devanagari && <p class="dev" lang="sa">{d.devanagari}</p>}
 
     {chant && <section><h2>{tr('names.chant')}</h2><p class="chant">{chant}</p></section>}
-    {meaning && <section><h2>{tr('names.meaning')}</h2><p>{meaning}</p></section>}
+    {meaning && (
+      <section class="gloss">
+        <h2>{tr('names.gloss')}</h2>
+        <p class="gloss-line">{meaning}</p>
+        {d.confidence_meaning === 'inferred' && <p class="small muted">{tr('names.verify')}</p>}
+      </section>
+    )}
     {reflection && <section><h2>{tr('names.reflection')}</h2><p>{reflection}</p></section>}
+
+    <blockquote class="quote small">
+      <p>“{soundQuote.text}”</p>
+      <footer class="muted">— {tr('names.sound')}, <a href={soundQuote.source} rel="noopener">isha.sadhguru.org</a></footer>
+    </blockquote>
 
     <p><a class="button primary" href={`https://wa.me/?text=${encodeURIComponent(shareText)}`} rel="noopener">{tr('names.share')}</a></p>
 
@@ -63,6 +75,9 @@ const shareText = `${d.number}. ${d.name}${d.tamil ? ` · ${d.tamil}` : ''}\n${u
   .ta { font-size: 1.75rem; font-weight: 600; margin: 0; }
   .dev { font-size: 1.5rem; color: var(--ink-soft); }
   .chant { font-size: 1.375rem; }
+  .gloss-line { font-size: 1.3rem; }
+  .quote { margin: var(--space-3) 0; padding-left: var(--space-2); border-left: 3px solid var(--kumkum); }
+  .quote p { margin: 0 0 0.25rem; }
   .sources a { overflow-wrap: anywhere; }
   .pager { display: flex; justify-content: space-between; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-4); }
   .pager a { display: inline-flex; align-items: center; min-height: var(--tap); font-family: var(--font-ui); }

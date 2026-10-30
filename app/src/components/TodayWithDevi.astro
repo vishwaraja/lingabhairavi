@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import { t, loc, type Lang } from '../i18n/ui';
+import { TIMINGS_SOURCE, statusAt, nextAbhishekam, fmtTime, istMinutes } from '../lib/timings';
+import { istDate } from '../lib/day';
+const { lang } = Astro.props as { lang: Lang };
+const tr = t(lang);
+const pournamis = (await getCollection('calendar'))
+  .map((e) => e.data)
+  .filter((e) => e.type === 'pournami')
+  .sort((a, b) => a.date.localeCompare(b.date))
+  .map((e) => ({ date: e.date, title: loc(e.title, lang) ?? '' }));
+// Build-time render (correct at build; the script below refreshes it on the phone, every minute).
+const today = istDate();
+const m = istMinutes();
+const isP = pournamis.some((p) => p.date === today);
+const st = statusAt(m, isP);
+const ab = nextAbhishekam(m);
+const nextP = pournamis.find((p) => p.date >= today);
+const fmtDate = (iso: string) =>
+  new Date(`${iso}T12:00:00+05:30`).toLocaleDateString(lang === 'ta' ? 'ta-IN' : 'en-IN', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Asia/Kolkata' });
+const tomorrow = tr('today.tomorrow');
+---
+<section class="today card" aria-labelledby="today-h" data-today data-lang={lang} data-pournamis={JSON.stringify(pournamis)}
+  data-l-open={tr('today.open')} data-l-closed={tr('today.closed')} data-l-closes={tr('today.closes')} data-l-opens={tr('today.opens')} data-l-tomorrow={tomorrow}>
+  <h2 id="today-h">{tr('today.title')}</h2>
+  <p class="where muted small">{tr('today.where')}</p>
+  <p class="status">
+    <span class="dot" data-open={st.open ? '' : undefined} aria-hidden="true"></span>
+    <strong data-t-status>{st.open ? tr('today.open') : tr('today.closed')}</strong>
+    <span data-t-when>{st.open ? `· ${tr('today.closes')} ${fmtTime(st.closesAt, lang)}` : `· ${tr('today.opens')} ${fmtTime(st.opensAt, lang)}${st.tomorrow ? ` (${tomorrow})` : ''}`}</span>
+  </p>
+  <p class="pnight small" data-t-pnight hidden={!isP}>{tr('today.pournamiNight')}</p>
+  <dl>
+    <div><dt>{tr('today.abhishekam')}</dt><dd data-t-ab>{fmtTime(ab.at, lang)}{ab.tomorrow ? ` (${tomorrow})` : ''}</dd></div>
+    {nextP && <div><dt>{tr('today.pournami')}</dt><dd data-t-p>{fmtDate(nextP.date)}{nextP.title ? ` · ${nextP.title}` : ''}</dd></div>}
+  </dl>
+  <p class="small muted">{tr('today.hours')}</p>
+  <p class="small muted"><a href={TIMINGS_SOURCE} rel="noopener">{tr('today.checked')}</a></p>
+</section>
+
+<style>
+  .today h2 { margin: 0; }
+  .where { margin: 0 0 var(--space-1); }
+  .status { font-size: 1.3rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.5rem; margin: var(--space-1) 0; }
+  .dot { width: 0.8rem; height: 0.8rem; border-radius: 50%; background: var(--ink-soft); display: inline-block; }
+  .dot[data-open] { background: var(--flame); box-shadow: 0 0 10px var(--flame); }
+  dl { display: grid; gap: var(--space-1); margin: var(--space-2) 0; }
+  dt { color: var(--ink-soft); font-size: var(--fs-small); }
+  dd { margin: 0; font-size: 1.2rem; }
+  .pnight { color: var(--accent); }
+</style>
+
+<script>
+  import { statusAt, nextAbhishekam, fmtTime, istMinutes } from '../lib/timings';
+  import { istDate } from '../lib/day';
+  for (const root of document.querySelectorAll<HTMLElement>('[data-today]')) {
+    const d = root.dataset, lang = (d.lang === 'ta' ? 'ta' : 'en') as 'en' | 'ta';
+    const ps = JSON.parse(d.pournamis!) as { date: string; title: string }[];
+    const q = (s: string) => root.querySelector<HTMLElement>(s);
+    const fmtDate = (iso: string) => new Date(`${iso}T12:00:00+05:30`).toLocaleDateString(lang === 'ta' ? 'ta-IN' : 'en-IN', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Asia/Kolkata' });
+    const tick = () => {
+      const today = istDate(), m = istMinutes();
+      const isP = ps.some((p) => p.date === today);
+      const st = statusAt(m, isP), ab = nextAbhishekam(m), np = ps.find((p) => p.date >= today);
+      q('[data-t-status]')!.textContent = st.open ? d.lOpen! : d.lClosed!;
+      q('.dot')!.toggleAttribute('data-open', st.open);
+      q('[data-t-when]')!.textContent = st.open ? `· ${d.lCloses} ${fmtTime(st.closesAt, lang)}` : `· ${d.lOpens} ${fmtTime(st.opensAt, lang)}${st.tomorrow ? ` (${d.lTomorrow})` : ''}`;
+      q('[data-t-pnight]')!.hidden = !isP;
+      q('[data-t-ab]')!.textContent = `${fmtTime(ab.at, lang)}${ab.tomorrow ? ` (${d.lTomorrow})` : ''}`;
+      const pe = q('[data-t-p]');
+      if (pe && np) pe.textContent = `${fmtDate(np.date)}${np.title ? ` · ${np.title}` : ''}`;
+    };
+    tick();
+    setInterval(tick, 60_000);
+  }
+</script>

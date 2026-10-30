@@ -1,0 +1,55 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, getStaticLangPaths, type Lang } from '../../i18n/ui';
+export const getStaticPaths = getStaticLangPaths;
+const lang = Astro.params.lang as Lang;
+const tr = t(lang);
+// Official links, from research/official-audit/AUDIT.md (checked 31 Oct 2026). Bhairavi Sadhana uses the working URL.
+const groups: { en: string; ta: string; links: { en: string; ta: string; url: string }[] }[] = [
+  { en: 'Offerings and rituals', ta: 'அர்ப்பணங்கள்', links: [
+    { en: 'Book Devi Abhishekam', ta: 'தேவி அபிஷேகம் முன்பதிவு', url: 'https://arpanam.sadhguru.org/car/DEVI_ABHISHEKAM' },
+    { en: 'Book Purnima Abhishekam', ta: 'பௌர்ணமி அபிஷேகம் முன்பதிவு', url: 'https://arpanam.sadhguru.org/car/POURNAMI_ABHISHEKAM' },
+    { en: 'All rituals and offerings', ta: 'அனைத்து அர்ப்பணங்கள்', url: 'https://isha.sadhguru.org/linga-bhairavi/in/en/rituals' },
+  ] },
+  { en: 'Sadhana', ta: 'சாதனா', links: [
+    { en: 'Bhairavi Sadhana', ta: 'பைரவி சாதனா', url: 'https://isha.sadhguru.org/in/en/yoga-meditation/additional-programs/bhairavi-sadhana' },
+    { en: 'Linga Bhairavi Stuti (page and PDFs)', ta: 'லிங்க பைரவி ஸ்துதி (PDF)', url: 'https://isha.sadhguru.org/linga-bhairavi/in/en/sadhana/linga-bhairavi-stuti' },
+    { en: 'Stuti in Tamil (PDF)', ta: 'தமிழ் ஸ்துதி (PDF)', url: 'https://public-isha.sadhguru.org/linga-bhairavi-stuti/tamil-stuti.pdf' },
+    { en: 'Devi Dandam', ta: 'தேவி தண்டம்', url: 'https://isha.sadhguru.org/linga-bhairavi/in/en/sadhana/devi-dandam' },
+  ] },
+  { en: 'Bring Devi home', ta: 'தேவியை இல்லத்திற்கு', links: [
+    { en: 'Linga Bhairavi Gudi', ta: 'லிங்க பைரவி குடி', url: 'https://isha.sadhguru.org/linga-bhairavi/in/en/bring-devi-home/linga-bhairavi-gudi' },
+    { en: 'Gudi (Isha Life)', ta: 'குடி (ஈஷா லைஃப்)', url: 'https://ishalife.sadhguru.org/in/devi-gudi' },
+    { en: 'Devi Yantras (Isha Life)', ta: 'தேவி யந்திரங்கள்', url: 'https://ishalife.sadhguru.org/in/devi-yantras' },
+    { en: 'Yantra Ceremony with Sadhguru', ta: 'சத்குருவுடன் யந்திர விழா', url: 'https://isha.sadhguru.org/in/en/events/special-events/yantra-ceremony-with-sadhguru' },
+  ] },
+  { en: 'Visit and dates', ta: 'தரிசனம், தேதிகள்', links: [
+    { en: 'Visit and timings, Coimbatore', ta: 'தரிசன நேரம், கோயம்புத்தூர்', url: 'https://isha.sadhguru.org/linga-bhairavi/in/en/visit-devi/linga-bhairavi-coimbatore' },
+    { en: 'Events', ta: 'நிகழ்வுகள்', url: 'https://isha.sadhguru.org/linga-bhairavi/in/en/events' },
+  ] },
+  { en: 'Serve and follow', ta: 'சேவை, தொடர்பு', links: [
+    { en: 'Devi Seva (volunteer)', ta: 'தேவி சேவை', url: 'https://isha.sadhguru.org/volunteer/devi-seva' },
+    { en: 'Donate', ta: 'நன்கொடை', url: 'https://lingabhairavi.org/en/syt-online-contribution/general-donation/donate' },
+    { en: 'Linga Bhairavi on YouTube', ta: 'YouTube', url: 'https://www.youtube.com/lingabhairavi' },
+    { en: 'Linga Bhairavi on Instagram', ta: 'Instagram', url: 'https://www.instagram.com/linga.bhairavi' },
+  ] },
+];
+---
+<Base lang={lang} title={tr('isha.title')}>
+  <h1>{tr('isha.title')}</h1>
+  <p>{tr('isha.intro')}</p>
+  {groups.map((g) => (
+    <section>
+      <h2>{g[lang]}</h2>
+      <ul class="links" role="list">
+        {g.links.map((l) => <li><a href={l.url} rel="noopener">{l[lang]} <span aria-hidden="true">↗</span></a><span class="small muted host">{new URL(l.url).hostname}</span></li>)}
+      </ul>
+    </section>
+  ))}
+</Base>
+<style>
+  .links { list-style: none; padding: 0; }
+  .links li { border-bottom: 1px solid var(--line); padding: 0.5rem 0; display: grid; }
+  .links a { display: inline-flex; align-items: center; min-height: var(--tap); font-size: 1.2rem; }
+  .host { margin-top: -0.25rem; }
+</style>

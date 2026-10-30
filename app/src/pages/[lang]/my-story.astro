@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import Lamp from '../../components/Lamp.astro';
+import { t, getStaticLangPaths, type Lang } from '../../i18n/ui';
+export const getStaticPaths = getStaticLangPaths;
+const lang = Astro.params.lang as Lang;
+const tr = t(lang);
+---
+<Base lang={lang} title={tr('story.title')}>
+  <h1>{tr('story.title')}</h1>
+  <div class="card placeholder">
+    {lang === 'ta'
+      ? <p>இந்தப் பக்கம் இன்னும் எழுதப்படவில்லை. தேவியுடன் என் பயணம் — முதல் தரிசனம், குடும்பம், இந்தத் தளம் ஏன் — விரைவில் இங்கே.</p>
+      : <p>This page is still being written. My journey with Devi — the first darshan, the family, and why this site exists — will be told here soon.</p>}
+  </div>
+  <Lamp lang={lang} />
+</Base>
+<style>.placeholder { border-style: dashed; font-style: italic; }</style>

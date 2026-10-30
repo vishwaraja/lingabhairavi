@@ -2,7 +2,7 @@
 // names    <- ../content/names.yaml   (falls back to src/fixtures/names.yaml)
 // calendar <- ../content/calendar.json (falls back to src/fixtures/calendar.json)
 import { defineCollection } from 'astro:content';
-import { file } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { existsSync } from 'node:fs';
 import { parse as parseYaml } from 'yaml';
@@ -64,17 +64,35 @@ const calendar = defineCollection({
     parser: (text) => {
       const data = JSON.parse(text);
       const list: any[] = Array.isArray(data) ? data : (data?.events ?? []);
-      return list.map((e) => ({ id: `${e.date}-${e.type}`, ...e }));
+      return list.map((e, i) => ({
+        ...e,
+        id: `${e.date}-${e.type}-${i}`,
+        title: e.title ?? { en: e.name_en, ta: e.name_ta },
+      }));
     },
   }),
   schema: z.object({
-    date: z.string(), // YYYY-MM-DD in IST
+    date: z.string(), // YYYY-MM-DD (IST)
     end: z.string().optional(),
-    type: z.string(), // pournami | amavasya | navaratri | ...
+    type: z.string(), // pournami | amavasya | navaratri | festival | anniversary
     title: localized.optional(),
-    note: localized.optional(),
+    starts_ist: z.string().nullish(),
+    ends_ist: z.string().nullish(),
+    basis: z.string().optional(),
+    notes: z.string().optional(),
+    source: z.string().optional(),
   }),
 });
 
-export const collections = { names, calendar };
+// Long-form pages written in ../content/*.md (visit, offerings, yantra).
+const pages = defineCollection({
+  loader: glob({ base: existsSync(new URL('../../content/visit.md', import.meta.url)) ? '../content' : 'src/fixtures/pages', pattern: ['visit.md', 'offerings.md', 'yantra.md'] }),
+  schema: z.object({
+    title: z.string(),
+    last_checked: z.coerce.string().optional(),
+    sources: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { names, calendar, pages };
 export const usingFixtures = { names: NAMES.startsWith('src/'), calendar: CALENDAR.startsWith('src/') };

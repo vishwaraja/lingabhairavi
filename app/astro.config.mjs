@@ -2,6 +2,7 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import AstroPWA from '@vite-pwa/astro';
+import remarkReviewTags from './src/lib/remark-review-tags.mjs';
 
 /** @type {[string, ...string[]]} */
 const TAMIL_RANGE = ['U+0964-0965', 'U+0B82-0BFA', 'U+200C-200D', 'U+20B9', 'U+25CC'];
@@ -12,6 +13,7 @@ export default defineConfig({
   site: 'https://lingabhairavi.co.in',
   trailingSlash: 'always',
   build: { format: 'directory', inlineStylesheets: 'always' },
+  markdown: { remarkPlugins: [remarkReviewTags] },
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
 
   i18n: {
@@ -61,8 +63,8 @@ export default defineConfig({
         scope: '/',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#14100e',
-        theme_color: '#14100e',
+        background_color: '#0e0a09',
+        theme_color: '#0e0a09',
         icons: [
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },

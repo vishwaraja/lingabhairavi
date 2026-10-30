@@ -1,0 +1,68 @@
+---
+// 1 / 3 / 6 / 9 / 11 Stuti cycles (as given on Isha's Stuti page). Resets each IST day.
+import { t, type Lang } from '../i18n/ui';
+const { lang } = Astro.props as { lang: Lang };
+const tr = t(lang);
+const choices = [1, 3, 6, 9, 11];
+---
+<section class="cycles card" data-cycles aria-labelledby="cyc-h">
+  <h2 id="cyc-h">{tr('chant.cycles')}</h2>
+  <fieldset>
+    <legend class="small muted">{tr('chant.choose')}</legend>
+    <div class="chips">
+      {choices.map((c) => (
+        <label><input type="radio" name="cycles" value={c} checked={c === 1} /><span>{c}</span></label>
+      ))}
+    </div>
+  </fieldset>
+  <p class="progress" aria-live="polite"><span data-c-done>0</span> {tr('chant.of')} <span data-c-target>1</span></p>
+  <div class="bar" aria-hidden="true"><span data-c-bar></span></div>
+  <p data-c-complete hidden class="complete">{tr('chant.complete')}</p>
+  <p class="row">
+    <button type="button" class="primary big" data-c-inc>{tr('chant.done1')}</button>
+    <button type="button" data-c-reset>{tr('mala.reset')}</button>
+  </p>
+</section>
+<style>
+  .cycles h2 { margin-top: 0; }
+  fieldset { border: 0; padding: 0; margin: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+  .chips label { position: relative; }
+  .chips input { position: absolute; opacity: 0; inset: 0; margin: 0; }
+  .chips span { display: inline-flex; align-items: center; justify-content: center; min-width: var(--tap); min-height: var(--tap); border: 2px solid var(--line); border-radius: var(--radius); font-family: var(--font-ui); font-size: 1.2rem; cursor: pointer; }
+  .chips input:checked + span { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+  .chips input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .progress { font-size: 2rem; margin: var(--space-2) 0 var(--space-1); font-variant-numeric: tabular-nums; }
+  .bar { height: 0.5rem; background: var(--line); border-radius: 1rem; overflow: hidden; }
+  .bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width var(--dur) var(--ease); }
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+  .big { flex: 1 1 14rem; min-height: 3.5rem; font-size: 1.2rem; }
+  .complete { color: var(--accent); font-size: 1.3rem; }
+</style>
+<script>
+  import { istDate } from '../lib/day';
+  const KEY = 'lb.cycles';
+  for (const root of document.querySelectorAll<HTMLElement>('[data-cycles]')) {
+    const q = (s: string) => root.querySelector<HTMLElement>(s)!;
+    let st = { day: istDate(), target: 1, done: 0 };
+    try { const v = JSON.parse(localStorage.getItem(KEY) ?? 'null'); if (v?.day === st.day) st = v; else if (v?.target) st.target = v.target; } catch {}
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch {} };
+    const render = () => {
+      q('[data-c-done]').textContent = String(st.done);
+      q('[data-c-target]').textContent = String(st.target);
+      q('[data-c-bar]').style.width = `${Math.min(100, (st.done / st.target) * 100)}%`;
+      q('[data-c-complete]').hidden = st.done < st.target;
+      root.querySelectorAll<HTMLInputElement>('input[name=cycles]').forEach((i) => (i.checked = Number(i.value) === st.target));
+    };
+    root.querySelectorAll<HTMLInputElement>('input[name=cycles]').forEach((i) =>
+      i.addEventListener('change', () => { st.target = Number(i.value); save(); render(); }));
+    q('[data-c-inc]').addEventListener('click', () => {
+      if (st.day !== istDate()) st = { day: istDate(), target: st.target, done: 0 };
+      st.done += 1;
+      navigator.vibrate?.(st.done >= st.target ? [80, 60, 80] : 20);
+      save(); render();
+    });
+    q('[data-c-reset]').addEventListener('click', () => { st.done = 0; save(); render(); });
+    render();
+  }
+</script>

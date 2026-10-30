@@ -1,0 +1,31 @@
+---
+// Privacy-enhanced YouTube facade: nothing is requested from Google until the user taps.
+import { t, type Lang } from '../i18n/ui';
+const { lang, id = 'qEZVkptPHpo' } = Astro.props as { lang: Lang; id?: string };
+const tr = t(lang);
+---
+<div class="player" data-yt={id}>
+  <button type="button" class="primary play" data-yt-play>
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+    {tr('chant.play')}
+  </button>
+  <p class="small muted">{tr('chant.playNote')} <a href={`https://www.youtube.com/watch?v=${id}`} rel="noopener">youtube.com</a></p>
+</div>
+<style>
+  .player { margin: var(--space-3) 0; }
+  .play { width: 100%; min-height: 4rem; font-size: 1.25rem; }
+  .player :global(iframe) { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: var(--radius); background: #000; }
+</style>
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-yt]')) {
+    root.querySelector('[data-yt-play]')?.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = `https://www.youtube-nocookie.com/embed/${root.dataset.yt}?autoplay=1&rel=0`;
+      f.title = 'Linga Bhairavi Stuti, Sounds of Isha';
+      f.allow = 'autoplay; encrypted-media; picture-in-picture';
+      f.allowFullscreen = true;
+      root.replaceChildren(f);
+      f.focus();
+    }, { once: true });
+  }
+</script>

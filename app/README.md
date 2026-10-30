@@ -8,6 +8,6 @@
 - Design drop-in: replace `src/styles/tokens.css` (all colours/type/space). UI strings: `src/i18n/ui.ts`.
 - Routes: `/` (language choice) · `/{en,ta}/` · `/{en,ta}/names/` · `/{en,ta}/names/<slug>/` · `/{en,ta}/sit/` · `/{en,ta}/calendar/` · `/og/<slug>.png`.
 - Placeholders: `scripts/make-placeholders.mjs` (icons, hero). OG fonts in `src/og-fonts/` (OFL).
-- Vercel: `vercel.json` here. For git deploys set the project Root Directory to `app`
+- Vercel test: project `lingabhairavi-test` (https://lingabhairavi-test.vercel.app). Deploy: `vercel pull --yes --environment=production && vercel build --prod && vercel deploy --prebuilt --prod` (prebuilt, so ../content is included).
   (keep "include files outside root" on so `../content` is available). Production is untouched until then.
 - `@vite-pwa/astro@1.2.0` declares peer `astro<=5`; a package.json `overrides` entry allows Astro 7 (works, verified offline).
