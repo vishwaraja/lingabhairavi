@@ -29,50 +29,57 @@ a { color: var(--gold) }
 
 /* hero */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(24px, 5vw, 64px); align-items: center; padding-block: clamp(28px, 6vw, 72px) 40px }
-.hero img { width: auto; max-width: 100%; max-height: min(78vh, 760px); margin-inline: auto; border-radius: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 1px var(--line); cursor: zoom-in; display: block }
+.hero img { width: auto; max-width: 100%; max-height: min(78vh, 760px); max-height: min(78svh, 760px); height: auto; margin-inline: auto; border-radius: 14px; box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 1px var(--line); cursor: zoom-in; display: block }
 .kicker { font: 500 12px/1 var(--sans); letter-spacing: .32em; text-transform: uppercase; color: var(--gold) }
 h1 { font: 600 clamp(44px, 7vw, 84px)/1 var(--serif); margin: 14px 0 10px; text-wrap: balance }
 .sub { font: italic 500 clamp(20px, 2.4vw, 26px)/1.35 var(--serif); color: var(--soft); margin: 0 0 22px; text-wrap: balance }
 .lead { color: var(--soft); max-width: 54ch; margin: 0 0 28px }
 .btns { display: flex; flex-wrap: wrap; gap: 12px }
-.btn { font: 500 15px/1 var(--sans); padding: 14px 22px; border-radius: 999px; border: 1px solid var(--gold); background: var(--gold); color: #1a0a06; cursor: pointer }
+.btn { font: 500 16px/1 var(--sans); padding: 14px 22px; min-height: 48px; border-radius: 999px; border: 1px solid var(--gold); background: var(--gold); color: #1a0a06; cursor: pointer }
 .btn.ghost { background: transparent; color: var(--gold) }
-.btn:focus-visible, .name:focus-visible, .tile:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px }
+.btn:focus-visible, .name:focus-visible, .tile:focus-visible, .nav:focus-visible, .close:focus-visible, .dot:focus-visible, a:focus-visible, .hero img:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px }
 
 /* sections */
 section { padding-block: 36px }
 h2 { font: 600 clamp(28px, 3.6vw, 40px)/1.1 var(--serif); margin: 0 0 6px }
-.note { color: var(--faint); margin: 0 0 22px; font-size: 14px }
+.note { color: var(--faint); margin: 0 0 22px; font-size: 16px }
 .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--line), transparent); margin: 8px 0 }
 
 /* 33 names */
 .names { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 8px }
-.name { display: flex; gap: 12px; align-items: baseline; text-align: left; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line);
+.name { display: flex; gap: 12px; align-items: baseline; text-align: left; padding: 12px 14px; min-height: 48px; border-radius: 10px; border: 1px solid var(--line);
   background: rgba(255,255,255,.02); color: var(--ink); cursor: pointer; font: 600 20px/1.2 var(--serif) }
 .name:hover { background: rgba(217,174,95,.08); border-color: var(--gold) }
-.name b { font: 500 12px/1 var(--sans); color: var(--gold); min-width: 2ch; letter-spacing: .05em }
+.name b { font: 500 14px/1 var(--sans); color: var(--gold); min-width: 2ch; letter-spacing: .05em }
 
 /* gallery */
 
-footer { padding-block: 40px 56px; color: var(--faint); font-size: 14px; border-top: 1px solid var(--line); margin-top: 24px }
+footer { padding-block: 40px calc(56px + env(safe-area-inset-bottom)); color: var(--soft); font-size: 16px; line-height: 1.7; overflow-wrap: anywhere; border-top: 1px solid var(--line); margin-top: 24px }
 
 /* reader */
-.reader { position: fixed; inset: 0; z-index: 10; background: rgba(8,3,2,.97); display: grid; grid-template-rows: auto 1fr auto; touch-action: pan-y }
+.reader { position: fixed; inset: 0; height: 100vh; height: 100dvh; z-index: 10; background: rgba(8,3,2,.97); display: grid; grid-template-rows: auto 1fr auto; touch-action: pan-y pinch-zoom; overscroll-behavior: contain }
+.reader.zoomed { touch-action: auto }
 .reader[hidden] { display: none }
-.rbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: calc(10px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left)); color: var(--soft); font-size: 14px }
+.rbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: calc(8px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left)); color: var(--soft); font-size: 16px }
 .rbar strong { font: 600 20px/1 var(--serif); color: var(--ink) }
 .stage { position: relative; display: grid; place-items: center; min-height: 0; overflow: hidden }
 .stage img { position: absolute; inset: 6px 0; width: 100%; height: calc(100% - 12px); object-fit: contain; user-select: none; -webkit-user-drag: none; transition: opacity .25s }
 .nav { position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--line); background: rgba(18,7,6,.7); color: var(--gold); font-size: 26px; cursor: pointer; display: grid; place-items: center }
 .nav.prev { left: max(12px, env(safe-area-inset-left)) } .nav.next { right: max(12px, env(safe-area-inset-right)) }
-.rfoot { display: flex; justify-content: center; gap: 10px; padding: 10px 16px calc(14px + env(safe-area-inset-bottom)); overflow-x: auto }
-.dot { width: 8px; height: 8px; border-radius: 50%; border: 0; padding: 0; background: rgba(217,174,95,.3); cursor: pointer; flex: none }
-.dot.on { background: var(--gold); transform: scale(1.4) }
-.close { background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 8px 14px; cursor: pointer; font: 500 14px/1 var(--sans) }
+.rfoot { display: flex; justify-content: center; padding: 0 max(8px, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(8px, env(safe-area-inset-left)) }
+/* each dot is a tall, evenly shared tap area with the small visible dot drawn inside */
+.dot { flex: 0 1 28px; min-width: 0; height: 44px; border: 0; padding: 0; background: none; cursor: pointer; display: grid; place-items: center; border-radius: 8px }
+.dot::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: rgba(217,174,95,.3) }
+.dot.on::before { background: var(--gold); transform: scale(1.4) }
+.close { background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 8px 16px; min-height: 44px; cursor: pointer; font: 500 16px/1 var(--sans) }
 @media (max-width: 760px) {
   .hero { grid-template-columns: minmax(0, 1fr) }
   .hero figure { order: -1 }
-  .nav { width: 42px; height: 42px; font-size: 22px; background: rgba(18,7,6,.5) }
+  .nav { width: 48px; height: 48px; font-size: 24px; background: rgba(18,7,6,.5) }
+}
+@media (max-height: 500px) {
+  .rbar { padding-block: calc(4px + env(safe-area-inset-top)) 4px }
+  .stage img { inset: 0; height: 100% }
 }
 </style>
 </head>
@@ -89,7 +96,7 @@ footer { padding-block: 40px 56px; color: var(--faint); font-size: 14px; border-
         <button class="btn ghost" data-open="18">The full Stuti</button>
       </div>
     </div>
-    <figure style="margin:0"><img src="img/full/01.jpg" alt="Linga Bhairavi Stuti: cover slide" data-open="0" width="1440" height="1801"></figure>
+    <figure style="margin:0"><img src="img/full/01.jpg" alt="Linga Bhairavi Stuti: cover slide" data-open="0" width="1440" height="1801" fetchpriority="high" tabindex="0" role="button"></figure>
   </div>
 
   <div class="divider"></div>
@@ -100,7 +107,7 @@ footer { padding-block: 40px 56px; color: var(--faint); font-size: 14px; border-
   </section>
 
   <footer>
-    Slides from <a href="https://www.instagram.com/p/DfA_ljrEvAB/">this Instagram post</a>, which Instagram labels as possibly made with AI.
+    Slides are from <a href="https://www.instagram.com/p/DfA_ljrEvAB/">this Instagram post</a>, which Instagram labels as possibly made with AI.
   </footer>
 </main>
 
@@ -144,11 +151,22 @@ function show(i) {
   document.getElementById("rCount").textContent = `${cur + 1} / 20`;
   [...dots.children].forEach((d, k) => d.classList.toggle("on", k === cur));
   new Image().src = `img/full/${pad((cur + 1) % 20)}.jpg`;   // preload the next slide
-  try { history.replaceState(null, "", `#slide-${cur + 1}`); } catch (e) {}
+  try { history.replaceState(history.state, "", `#slide-${cur + 1}`); } catch (e) {}
 }
-function open(i) { lastFocus = document.activeElement; R.hidden = false; document.body.style.overflow = "hidden"; show(i); document.getElementById("rNext").focus(); }
-function close() { R.hidden = true; document.body.style.overflow = ""; try { history.replaceState(null, "", " "); } catch (e) {} if (lastFocus) lastFocus.focus(); }
+function open(i) {
+  lastFocus = document.activeElement; R.hidden = false; document.body.style.overflow = "hidden";
+  // an extra history entry, so the phone's Back button closes the reader instead of leaving the page
+  if (!(history.state && history.state.reader)) try { history.pushState({reader: 1}, "", `#slide-${i + 1}`); } catch (e) {}
+  show(i); document.getElementById("rNext").focus();
+}
+function hide() { R.hidden = true; R.classList.remove("zoomed"); document.body.style.overflow = ""; if (lastFocus) lastFocus.focus(); }
+function close() {
+  if (history.state && history.state.reader) history.back();   // popstate below hides the reader
+  else { try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {} hide(); }
+}
+window.addEventListener("popstate", () => { if (!R.hidden && !(history.state && history.state.reader)) hide(); });
 document.addEventListener("click", e => { const t = e.target.closest("[data-open]"); if (t && R.hidden) open(+t.dataset.open); });
+document.addEventListener("keydown", e => { if (R.hidden && (e.key === "Enter" || e.key === " ") && e.target.matches("img[data-open]")) { e.preventDefault(); open(+e.target.dataset.open); } });
 document.getElementById("rPrev").onclick = () => show(cur - 1);
 document.getElementById("rNext").onclick = () => show(cur + 1);
 document.getElementById("rClose").onclick = close;
@@ -156,13 +174,23 @@ document.addEventListener("keydown", e => {
   if (R.hidden) return;
   if (e.key === "ArrowRight") show(cur + 1); else if (e.key === "ArrowLeft") show(cur - 1); else if (e.key === "Escape") close();
 });
-let x0 = null;
+// swipe left/right to turn slides; pinch-zoom stays available, and swipes are ignored while zoomed in or with two fingers
+const zoomed = () => window.visualViewport && visualViewport.scale > 1.05;
+if (window.visualViewport) visualViewport.addEventListener("resize", () => R.classList.toggle("zoomed", zoomed()));
+let x0 = null, y0 = 0;
 const stage = document.getElementById("stage");
-stage.addEventListener("pointerdown", e => x0 = e.clientX);
-stage.addEventListener("pointerup", e => { if (x0 === null) return; const dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 40) show(cur + (dx < 0 ? 1 : -1)); });
+stage.addEventListener("pointerdown", e => { x0 = !e.isPrimary || zoomed() ? null : e.clientX; y0 = e.clientY; });
+stage.addEventListener("pointercancel", () => x0 = null);
+stage.addEventListener("pointerup", e => {
+  if (x0 === null || !e.isPrimary) return; const dx = e.clientX - x0, dy = e.clientY - y0; x0 = null;
+  if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(cur + (dx < 0 ? 1 : -1));
+});
 stage.addEventListener("click", e => { if (e.target === stage) close(); });
 const m = location.hash.match(/^#slide-(\d+)$/);
-if (m && +m[1] >= 1 && +m[1] <= 20) open(+m[1] - 1);
+if (m && +m[1] >= 1 && +m[1] <= 20) {
+  try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+  open(+m[1] - 1);
+}
 </script>
 </body>
 </html>
