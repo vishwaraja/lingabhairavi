@@ -55,8 +55,7 @@
       "about": {"@type": "Thing", "name": "Linga Bhairavi"},
       "keywords": "Linga Bhairavi, Linga Bhairavi Stuti, Devi Stuti, Bhairavi Stuti, Stuti, 33 names of Linga Bhairavi, 33 names of Devi, Devi, Isha",
       "inLanguage": "en",
-      "image": "https://lingabhairavi.co.in/img/full/01.jpg",
-      "isBasedOn": {"@type": "CreativeWork", "url": "https://www.instagram.com/p/DfA_ljrEvAB/"}
+      "image": "https://lingabhairavi.co.in/img/full/01.jpg"
     }
   ]
 }
@@ -110,7 +109,8 @@ h2 { font: 600 clamp(28px, 3.6vw, 40px)/1.1 var(--serif); margin: 0 0 6px }
 
 /* gallery */
 
-footer { padding-block: 40px calc(56px + env(safe-area-inset-bottom)); color: var(--soft); font-size: 16px; line-height: 1.7; overflow-wrap: anywhere; border-top: 1px solid var(--line); margin-top: 24px }
+/* bottom space so the last names clear the phone's home bar */
+main.wrap { padding-bottom: calc(56px + env(safe-area-inset-bottom)) }
 
 /* reader */
 .reader { position: fixed; inset: 0; height: 100vh; height: 100dvh; z-index: 10; background: rgba(8,3,2,.97); display: grid; grid-template-rows: auto 1fr auto; touch-action: pan-y pinch-zoom; overscroll-behavior: contain }
@@ -196,9 +196,6 @@ footer { padding-block: 40px calc(56px + env(safe-area-inset-bottom)); color: va
     </div>
   </section>
 
-  <footer>
-    Slides are from <a href="https://www.instagram.com/p/DfA_ljrEvAB/">this Instagram post</a>, which Instagram labels as possibly made with AI.
-  </footer>
 </main>
 
 <div class="reader" id="reader" hidden role="dialog" aria-modal="true" aria-label="Slide reader">
