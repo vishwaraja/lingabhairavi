@@ -61,7 +61,8 @@ footer { padding-block: 40px calc(56px + env(safe-area-inset-bottom)); color: va
 .reader.zoomed { touch-action: auto }
 .reader[hidden] { display: none }
 .rbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: calc(8px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left)); color: var(--soft); font-size: 16px }
-.rbar strong { font: 600 20px/1 var(--serif); color: var(--ink) }
+.rbar strong { font: 600 20px/1.15 var(--serif); color: var(--ink) }
+#rCount { white-space: nowrap }
 .stage { position: relative; display: grid; place-items: center; min-height: 0; overflow: hidden }
 .stage img { position: absolute; inset: 6px 0; width: 100%; height: calc(100% - 12px); object-fit: contain; user-select: none; -webkit-user-drag: none; transition: opacity .25s }
 .nav { position: absolute; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 50%; border: 1px solid var(--line); background: rgba(18,7,6,.7); color: var(--gold); font-size: 26px; cursor: pointer; display: grid; place-items: center }
@@ -71,7 +72,7 @@ footer { padding-block: 40px calc(56px + env(safe-area-inset-bottom)); color: va
 .dot { flex: 0 1 28px; min-width: 0; height: 44px; border: 0; padding: 0; background: none; cursor: pointer; display: grid; place-items: center; border-radius: 8px }
 .dot::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: rgba(217,174,95,.3) }
 .dot.on::before { background: var(--gold); transform: scale(1.4) }
-.close { background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 8px 16px; min-height: 44px; cursor: pointer; font: 500 16px/1 var(--sans) }
+.close { background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 8px 16px; min-height: 44px; cursor: pointer; font: 500 16px/1 var(--sans); white-space: nowrap; flex: none }
 @media (max-width: 760px) {
   .hero { grid-template-columns: minmax(0, 1fr) }
   .hero figure { order: -1 }
