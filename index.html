@@ -75,6 +75,7 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box }
+html { scroll-behavior: smooth }
 html, body { margin: 0; background: var(--bg); color: var(--ink) }
 body { font: 16px/1.6 var(--sans); padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
   background: radial-gradient(120% 60% at 50% 0%, #2a0f0b 0%, var(--bg) 60%) fixed }
@@ -90,7 +91,7 @@ h1 .kicker { display: block; margin-bottom: 14px }
 .sub { font: italic 500 clamp(20px, 2.4vw, 26px)/1.35 var(--serif); color: var(--soft); margin: 0 0 22px; text-wrap: balance }
 .lead { color: var(--soft); max-width: 54ch; margin: 0 0 28px }
 .btns { display: flex; flex-wrap: wrap; gap: 12px }
-.btn { font: 500 16px/1 var(--sans); padding: 14px 22px; min-height: 48px; border-radius: 999px; border: 1px solid var(--gold); background: var(--gold); color: #1a0a06; cursor: pointer }
+.btn { display: inline-flex; align-items: center; text-decoration: none; font: 500 16px/1 var(--sans); padding: 14px 22px; min-height: 48px; border-radius: 999px; border: 1px solid var(--gold); background: var(--gold); color: #1a0a06; cursor: pointer }
 .btn.ghost { background: transparent; color: var(--gold) }
 .btn:focus-visible, .name:focus-visible, .tile:focus-visible, .nav:focus-visible, .close:focus-visible, .dot:focus-visible, a:focus-visible, .hero img:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px }
 
@@ -106,6 +107,28 @@ h2 { font: 600 clamp(28px, 3.6vw, 40px)/1.1 var(--serif); margin: 0 0 6px }
   background: rgba(255,255,255,.02); color: var(--ink); cursor: pointer; font: 600 20px/1.2 var(--serif) }
 .name:hover { background: rgba(217,174,95,.08); border-color: var(--gold) }
 .name b { font: 500 14px/1 var(--sans); color: var(--gold); min-width: 2ch; letter-spacing: .05em }
+
+/* full Stuti as text */
+.stuti { max-width: 760px; margin-inline: auto }
+.stuti h2, .stuti > .note { text-align: center }
+.sbar { position: sticky; top: env(safe-area-inset-top); z-index: 5; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; padding: 10px 0; margin-bottom: 8px;
+  background: linear-gradient(var(--bg) 80%, transparent) }
+.sbar button { font: 500 16px/1 var(--sans); min-height: 48px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg2); color: var(--ink); cursor: pointer }
+.sbar button[aria-pressed="true"] { border-color: var(--gold); color: var(--gold) }
+.sbar button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px }
+.sgroup { list-style: none; margin: 0; padding: 0; counter-reset: line calc(var(--start) - 1) }
+.sgroup li { counter-increment: line; position: relative; padding: 12px 0 12px 44px; border-bottom: 1px solid rgba(217,174,95,.1) }
+.sgroup li::before { content: counter(line); position: absolute; left: 0; top: 18px; width: 30px; text-align: right; font: 500 14px/1 var(--sans); color: var(--faint) }
+.sline { margin: 0; font: 500 calc(22px * var(--fs, 1))/1.35 var(--serif); color: var(--soft); text-wrap: balance }
+.sline b { font-weight: 700; font-size: 1.18em; color: var(--gold); white-space: nowrap }
+.smean { margin: 4px 0 0; font: italic 500 calc(18px * var(--fs, 1))/1.4 var(--serif); color: var(--faint) }
+.stuti:not(.meanings) .smean { display: none }
+.lamp { display: flex; justify-content: center; color: var(--gold); padding: 22px 0 18px; opacity: .8 }
+.sclose { text-align: center; padding: 26px 16px; border: 1px solid var(--line); border-radius: 14px; background: rgba(217,174,95,.05) }
+.sclose span { white-space: nowrap }
+.sclose p { margin: 0; padding: 6px 0; font: italic 600 calc(23px * var(--fs, 1))/1.35 var(--serif); color: var(--gold); text-wrap: balance }
+.rtext { display: none } .rtext.on { display: inline-flex; align-items: center }
+@media (min-width: 761px) { .sline { font-size: calc(26px * var(--fs, 1)) } .smean { font-size: calc(19px * var(--fs, 1)) } }
 
 /* gallery */
 
@@ -149,7 +172,7 @@ main.wrap { padding-bottom: calc(56px + env(safe-area-inset-bottom)) }
       <p class="lead">Twenty slides: one for each pair of the 33 names of Devi, the full Linga Bhairavi Stuti, and Sadhguru's words on the Grace of Bhairavi. Read them one at a time, or jump straight to a name.</p>
       <div class="btns">
         <button class="btn" data-open="0">Begin reading</button>
-        <button class="btn ghost" data-open="18">The full Stuti</button>
+        <a class="btn ghost" href="#stuti">The full Stuti</a>
       </div>
     </div>
     <figure style="margin:0"><img src="img/full/01.jpg" alt="Linga Bhairavi Stuti cover slide: 33 Names of the Divine Feminine, with Devi Linga Bhairavi" data-open="0" width="1440" height="1801" fetchpriority="high" tabindex="0" role="button"></figure>
@@ -196,10 +219,70 @@ main.wrap { padding-bottom: calc(56px + env(safe-area-inset-bottom)) }
     </div>
   </section>
 
+  <div class="divider"></div>
+  <section id="stuti" class="stuti">
+    <h2>The full Stuti</h2>
+    <p class="note">Chant 1, 3, 6, 9 or 11 times. Turn on meanings for a devotee's understanding of each name.</p>
+    <div class="sbar">
+      <button type="button" id="sMean" aria-pressed="false">Show meanings</button>
+      <button type="button" id="sSmaller" aria-label="Smaller text">A−</button>
+      <button type="button" id="sBigger" aria-label="Bigger text">A+</button>
+    </div>
+      <ol class="sgroup" start="1" style="--start:1">
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Gurubhyo</b> <span class="jai">Namah Shri</span></p><p class="smean">To the Gurus: we bow first to the Guru.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Swayambho</b> <span class="jai">Namah Shri</span></p><p class="smean">The self-born one, who exists by herself.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Swa dhārini</b> <span class="jai">Namah Shri</span></p><p class="smean">She who holds herself up, and holds all of us.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Mahā Kalyāni</b> <span class="jai">Namah Shri</span></p><p class="smean">The great auspicious one, who brings all that is good.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Mahā Bhadrāni</b> <span class="jai">Namah Shri</span></p><p class="smean">The great blessed one, who keeps us safe and well.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Maheshwari</b> <span class="jai">Namah Shri</span></p><p class="smean">The great Goddess, the great ruler.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Nāgeshwari</b> <span class="jai">Namah Shri</span></p><p class="smean">Queen of the serpents.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Vishweshwari</b> <span class="jai">Namah Shri</span></p><p class="smean">Ruler of the whole universe.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Someshwari</b> <span class="jai">Namah Shri</span></p><p class="smean">Ruler of Soma: the moon and its cool nectar.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Dukha Samhāri</b> <span class="jai">Namah Shri</span></p><p class="smean">She who ends sorrow.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Hiranya Garbhini</b> <span class="jai">Namah Shri</span></p><p class="smean">She who carries the golden womb, the seed of creation.</p></li>
+      </ol>
+      <div class="lamp" aria-hidden="true"><svg viewBox="0 0 120 24" width="120" height="24"><path d="M0 14h44M76 14h44" stroke="currentColor" stroke-width="1"/><path d="M60 3c3 4 3 7 0 9c-3-2-3-5 0-9z" fill="currentColor"/><path d="M47 14h26c-2 5-7 7-13 7s-11-2-13-7z" fill="currentColor"/></svg></div>
+      <ol class="sgroup" start="12" style="--start:12">
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Amrita Varshini</b> <span class="jai">Namah Shri</span></p><p class="smean">She who showers nectar like rain.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Bhakta Rakshini</b> <span class="jai">Namah Shri</span></p><p class="smean">Protector of those who love her.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Saubhāgya Dāyini</b> <span class="jai">Namah Shri</span></p><p class="smean">Giver of good fortune and a happy life.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Sarva Janani</b> <span class="jai">Namah Shri</span></p><p class="smean">Mother of all.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Garbha Dāyini</b> <span class="jai">Namah Shri</span></p><p class="smean">She who blesses the womb with new life.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Shoonya Vāsini</b> <span class="jai">Namah Shri</span></p><p class="smean">She who lives in emptiness.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Mahā Nandini</b> <span class="jai">Namah Shri</span></p><p class="smean">The great joy; she who fills us with delight.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Vāmeshwari</b> <span class="jai">Namah Shri</span></p><p class="smean">Goddess of the left side, the feminine half of life.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Karma Pālini</b> <span class="jai">Namah Shri</span></p><p class="smean">She who watches over our karma, our actions and their fruits.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Yonīshwari</b> <span class="jai">Namah Shri</span></p><p class="smean">Goddess of the womb, the source of all life.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Linga Roopini</b> <span class="jai">Namah Shri</span></p><p class="smean">She who takes the form of a linga.</p></li>
+      </ol>
+      <div class="lamp" aria-hidden="true"><svg viewBox="0 0 120 24" width="120" height="24"><path d="M0 14h44M76 14h44" stroke="currentColor" stroke-width="1"/><path d="M60 3c3 4 3 7 0 9c-3-2-3-5 0-9z" fill="currentColor"/><path d="M47 14h26c-2 5-7 7-13 7s-11-2-13-7z" fill="currentColor"/></svg></div>
+      <ol class="sgroup" start="23" style="--start:23">
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Shyāma Sundari</b> <span class="jai">Namah Shri</span></p><p class="smean">The dark, beautiful one.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Trinetrini</b> <span class="jai">Namah Shri</span></p><p class="smean">The three-eyed one.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Sarva Mangali</b> <span class="jai">Namah Shri</span></p><p class="smean">Auspicious in every way; she makes all things good.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Mahā Yogini</b> <span class="jai">Namah Shri</span></p><p class="smean">The great yogini, one with all of life.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Klesha Nāshini</b> <span class="jai">Namah Shri</span></p><p class="smean">She who destroys our troubles and afflictions.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Ugra Roopini</b> <span class="jai">Namah Shri</span></p><p class="smean">She whose form is fierce and mighty.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Divya Kāmini</b> <span class="jai">Namah Shri</span></p><p class="smean">The divine beloved.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Kāla Roopini</b> <span class="jai">Namah Shri</span></p><p class="smean">She whose form is Time itself.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Trishoola Dhārini</b> <span class="jai">Namah Shri</span></p><p class="smean">She who holds the trident.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Yaksha Kāmini</b> <span class="jai">Namah Shri</span></p><p class="smean">Beloved even of the Yakshas, the unseen celestial beings.</p></li>
+        <li><p class="sline"><span class="jai">Jai Bhairavi Devi</span> <b>Mukti Dāyini</b> <span class="jai">Namah Shri</span></p><p class="smean">Giver of liberation.</p></li>
+      </ol>
+      <div class="lamp" aria-hidden="true"><svg viewBox="0 0 120 24" width="120" height="24"><path d="M0 14h44M76 14h44" stroke="currentColor" stroke-width="1"/><path d="M60 3c3 4 3 7 0 9c-3-2-3-5 0-9z" fill="currentColor"/><path d="M47 14h26c-2 5-7 7-13 7s-11-2-13-7z" fill="currentColor"/></svg></div>
+      <div class="sclose">
+        <p><span>Aum Mahā Devi</span> <span>Linga Bhairavi Namah Shri</span></p>
+        <p><span>Aum Shri Shāmbhavi</span> <span>Linga Bhairavi Namah Shri</span></p>
+        <p><span>Aum Mahā Shakti</span> <span>Linga Bhairavi Namah Shri</span></p>
+        <p><span>Namah Shri Namah Shri</span> <span>Devi Namah Shri</span></p>
+      </div>
+
+  </section>
+
 </main>
 
 <div class="reader" id="reader" hidden role="dialog" aria-modal="true" aria-label="Slide reader">
-  <div class="rbar"><div><strong id="rTitle"></strong> <span id="rCount"></span></div><button class="close" id="rClose">Close · Esc</button></div>
+  <div class="rbar"><div><strong id="rTitle"></strong> <span id="rCount"></span></div><span style="display:flex;gap:8px"><button class="close rtext" id="rText">Read as text</button><button class="close" id="rClose">Close · Esc</button></span></div>
   <div class="stage" id="stage">
     <img id="rImg" alt="">
     <button class="nav prev" id="rPrev" aria-label="Previous slide">‹</button>
@@ -230,6 +313,7 @@ function show(i) {
   document.getElementById("rTitle").textContent = TITLES[cur];
   document.getElementById("rCount").textContent = `${cur + 1} / 20`;
   [...dots.children].forEach((d, k) => d.classList.toggle("on", k === cur));
+  document.getElementById("rText").classList.toggle("on", cur === 18);
   new Image().src = `img/full/${pad((cur + 1) % 20)}.jpg`;   // preload the next slide
   try { history.replaceState(history.state, "", `#slide-${cur + 1}`); } catch (e) {}
 }
@@ -266,6 +350,17 @@ stage.addEventListener("pointerup", e => {
   if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(cur + (dx < 0 ? 1 : -1));
 });
 stage.addEventListener("click", e => { if (e.target === stage) close(); });
+// full Stuti text: meanings toggle and text size, remembered on this device
+const ST = document.getElementById("stuti"), sMean = document.getElementById("sMean");
+const store = (k, v) => { try { v === undefined ? (v = localStorage.getItem(k)) : localStorage.setItem(k, v); } catch (e) { v = null; } return v; };
+function setMean(on) { ST.classList.toggle("meanings", on); sMean.setAttribute("aria-pressed", on); sMean.textContent = on ? "Hide meanings" : "Show meanings"; }
+let fs = +store("lb-fs") || 1;
+const setFs = v => { fs = Math.min(1.5, Math.max(.85, Math.round(v * 100) / 100)); ST.style.setProperty("--fs", fs); store("lb-fs", fs); };
+setMean(store("lb-mean") === "1"); setFs(fs);
+sMean.onclick = () => { const on = !ST.classList.contains("meanings"); setMean(on); store("lb-mean", on ? "1" : "0"); };
+document.getElementById("sSmaller").onclick = () => setFs(fs - .1);
+document.getElementById("sBigger").onclick = () => setFs(fs + .1);
+document.getElementById("rText").onclick = () => { close(); setTimeout(() => ST.scrollIntoView({behavior: "smooth"}), 60); };
 const m = location.hash.match(/^#slide-(\d+)$/);
 if (m && +m[1] >= 1 && +m[1] <= 20) {
   try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
