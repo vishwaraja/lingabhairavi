@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    { "source": "/:path*", "has": [{ "type": "host", "value": "www.lingabhairavi.co.in" }], "destination": "https://lingabhairavi.co.in/:path*", "permanent": true },
+    { "source": "/:path*", "has": [{ "type": "host", "value": "lingabhairavi-six.vercel.app" }], "destination": "https://lingabhairavi.co.in/:path*", "permanent": true },
+    { "source": "/:path*", "has": [{ "type": "host", "value": "lingabhairavi-vishwarajas-projects.vercel.app" }], "destination": "https://lingabhairavi.co.in/:path*", "permanent": true }
+  ],
+  "headers": [
+    { "source": "/sitemap.xml", "headers": [{ "key": "Content-Type", "value": "application/xml; charset=utf-8" }] }
+  ]
+}
