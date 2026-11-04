@@ -1,5 +1,6 @@
 {
   "redirects": [
+    { "source": "/mu", "destination": "/?utm_source=whatsapp&utm_medium=direct&utm_campaign=p14#stuti", "permanent": false },
     { "source": "/sh", "destination": "/?utm_source=whatsapp&utm_medium=direct&utm_campaign=p12#stuti", "permanent": false },
     { "source": "/dh", "destination": "/?utm_source=whatsapp&utm_medium=direct&utm_campaign=p13#stuti", "permanent": false },
     { "source": "/ra", "destination": "/?utm_source=whatsapp&utm_medium=direct&utm_campaign=p11#stuti", "permanent": false },
