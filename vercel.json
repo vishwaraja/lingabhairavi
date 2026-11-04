@@ -1,5 +1,7 @@
 {
   "redirects": [
+    { "source": "/sh", "destination": "/?utm_source=whatsapp&utm_medium=direct&utm_campaign=p12#stuti", "permanent": false },
+    { "source": "/dh", "destination": "/?utm_source=whatsapp&utm_medium=direct&utm_campaign=p13#stuti", "permanent": false },
     { "source": "/ra", "destination": "/?utm_source=whatsapp&utm_medium=direct&utm_campaign=p11#stuti", "permanent": false },
     { "source": "/th", "destination": "/?utm_source=whatsapp&utm_medium=direct&utm_campaign=p9#stuti", "permanent": false },
     { "source": "/ka", "destination": "/?utm_source=whatsapp&utm_medium=direct&utm_campaign=p10#stuti", "permanent": false },
