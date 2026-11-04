@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Linga Bhairavi Stuti – 33 Names of Devi with Meanings</title>
+<!-- Google Analytics (property lingabhairavi, stream G-F4SCGJETP8) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F4SCGJETP8"></script>
+<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag("js", new Date()); gtag("config", "G-F4SCGJETP8");</script>
 <meta name="description" content="Linga Bhairavi Stuti, the Devi Stuti chanted at Isha: all 33 names of Linga Bhairavi with their meanings, slide by slide, and the full Bhairavi Stuti.">
 <link rel="canonical" href="https://lingabhairavi.co.in/">
 <meta property="og:type" content="website">
@@ -361,6 +364,23 @@ sMean.onclick = () => { const on = !ST.classList.contains("meanings"); setMean(o
 document.getElementById("sSmaller").onclick = () => setFs(fs - .1);
 document.getElementById("sBigger").onclick = () => setFs(fs + .1);
 document.getElementById("rText").onclick = () => { close(); setTimeout(() => ST.scrollIntoView({behavior: "smooth"}), 60); };
+// analytics: which buttons people use, which slides they see, and whether they reach the end of the Stuti
+const ga = (name, params) => { try { gtag("event", name, params || {}); } catch (e) {} };
+document.addEventListener("click", e => {
+  const t = e.target.closest("a, button, img[data-open]"); if (!t) return;
+  if (t.matches('.hero a[href="#stuti"]')) ga("chant_stuti_click", {from: "hero"});
+  else if (t.matches(".hero [data-open]")) ga("meanings_slides_open", {from: t.tagName === "IMG" ? "hero_image" : "hero_button"});
+  else if (t.matches(".name[data-open]")) ga("name_card_click", {name: t.textContent.replace(/^\d+/, "").trim(), slide: +t.dataset.open + 1});
+  else if (t.id === "sMean") ga("meanings_toggle", {state: ST.classList.contains("meanings") ? "off" : "on"})  // capture phase: runs before the toggle, so report the new state;
+  else if (t.id === "sBigger" || t.id === "sSmaller") ga("text_size", {direction: t.id === "sBigger" ? "bigger" : "smaller"});
+  else if (t.id === "rText") ga("read_as_text_click", {slide: cur + 1});
+}, true);
+const _show = show; show = i => { _show(i); ga("slide_view", {slide: cur + 1, title: TITLES[cur]}); };
+const endMark = document.querySelector(".sclose");
+if (endMark && "IntersectionObserver" in window) {
+  const io = new IntersectionObserver(es => { if (es.some(x => x.isIntersecting)) { ga("stuti_reached_end"); io.disconnect(); } });
+  io.observe(endMark);
+}
 const m = location.hash.match(/^#slide-(\d+)$/);
 if (m && +m[1] >= 1 && +m[1] <= 20) {
   try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
