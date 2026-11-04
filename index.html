@@ -381,6 +381,18 @@ if (endMark && "IntersectionObserver" in window) {
   const io = new IntersectionObserver(es => { if (es.some(x => x.isIntersecting)) { ga("stuti_reached_end"); io.disconnect(); } });
   io.observe(endMark);
 }
+// seconds the Stuti text was on screen, sent when the visitor leaves or switches away (a sign they chanted)
+let stutiMs = 0, stutiSince = null;
+if ("IntersectionObserver" in window) new IntersectionObserver(es => {
+  const vis = es[es.length - 1].isIntersecting;
+  if (vis && stutiSince === null) stutiSince = Date.now(); else if (!vis && stutiSince !== null) { stutiMs += Date.now() - stutiSince; stutiSince = null; }
+}).observe(ST);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState !== "hidden") { if (stutiSince === null && ST.getBoundingClientRect().top < innerHeight && ST.getBoundingClientRect().bottom > 0) stutiSince = Date.now(); return; }
+  if (stutiSince !== null) { stutiMs += Date.now() - stutiSince; stutiSince = null; }
+  const sec = Math.round(stutiMs / 1000); stutiMs = 0;
+  if (sec >= 5) ga("stuti_time", {seconds: sec, value: sec, transport_type: "beacon"});
+});
 const m = location.hash.match(/^#slide-(\d+)$/);
 if (m && +m[1] >= 1 && +m[1] <= 20) {
   try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
