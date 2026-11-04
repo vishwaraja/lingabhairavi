@@ -1,5 +1,7 @@
 {
   "redirects": [
+    { "source": "/college", "destination": "/?utm_source=whatsapp&utm_medium=group&utm_campaign=college#stuti", "permanent": false },
+    { "source": "/school", "destination": "/?utm_source=whatsapp&utm_medium=group&utm_campaign=school#stuti", "permanent": false },
     { "source": "/wa", "destination": "/?utm_source=whatsapp&utm_medium=share#stuti", "permanent": false },
     { "source": "/(.*)", "has": [{ "type": "host", "value": "www.lingabhairavi.co.in" }], "destination": "https://lingabhairavi.co.in/$1", "permanent": true },
     { "source": "/(.*)", "has": [{ "type": "host", "value": "lingabhairavi-six.vercel.app" }], "destination": "https://lingabhairavi.co.in/$1", "permanent": true },
