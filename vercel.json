@@ -1,7 +1,7 @@
 {
   "redirects": [
-    { "source": "/devi", "destination": "/?utm_source=whatsapp&utm_medium=group&utm_campaign=college#stuti", "permanent": false },
-    { "source": "/stuti", "destination": "/?utm_source=whatsapp&utm_medium=group&utm_campaign=school#stuti", "permanent": false },
+    { "source": "/devi", "destination": "/?utm_source=whatsapp&utm_medium=group&utm_campaign=g1#stuti", "permanent": false },
+    { "source": "/stuti", "destination": "/?utm_source=whatsapp&utm_medium=group&utm_campaign=g2#stuti", "permanent": false },
     { "source": "/college", "destination": "/?utm_source=whatsapp&utm_medium=group&utm_campaign=college#stuti", "permanent": false },
     { "source": "/school", "destination": "/?utm_source=whatsapp&utm_medium=group&utm_campaign=school#stuti", "permanent": false },
     { "source": "/wa", "destination": "/?utm_source=whatsapp&utm_medium=share#stuti", "permanent": false },
