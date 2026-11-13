@@ -137,6 +137,35 @@ h2 { font: 600 clamp(28px, 3.6vw, 40px)/1.1 var(--serif); margin: 0 0 6px }
 .rtext { display: none } .rtext.on { display: inline-flex; align-items: center }
 @media (min-width: 761px) { .sline { font-size: calc(26px * var(--fs, 1)) } .smean { font-size: calc(19px * var(--fs, 1)) } }
 
+/* chant-along video (loads YouTube only on tap) */
+.video { position: relative; aspect-ratio: 16 / 9; max-width: 100%; margin: 6px 0 22px; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: #000 }
+.video button { all: unset; position: absolute; inset: 0; cursor: pointer; display: grid; place-items: center }
+.video img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .75 }
+.video .play { position: relative; display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; min-height: 48px; border-radius: 999px; background: var(--gold); color: #1a0a06; font: 500 16px/1 var(--sans); box-shadow: 0 10px 30px rgba(0,0,0,.5) }
+.video button:focus-visible .play { outline: 2px solid var(--ink); outline-offset: 3px }
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0 }
+.vcap { margin: -14px 0 22px; text-align: center; font-size: 14px; color: var(--faint) }
+/* lyrics in other languages */
+.langs { margin-top: 22px; text-align: center }
+.langs p { margin: 0 0 10px; color: var(--soft) }
+.chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px }
+.chips a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg2); color: var(--ink); text-decoration: none; font: 500 16px/1 var(--sans) }
+.chips a:hover { border-color: var(--gold); color: var(--gold) }
+/* how to chant + go deeper */
+.faq { max-width: 760px; margin-inline: auto }
+.faq details { border-bottom: 1px solid rgba(217,174,95,.14) }
+.faq summary { cursor: pointer; list-style: none; padding: 16px 32px 16px 0; position: relative; font: 600 calc(21px * var(--fs, 1))/1.3 var(--serif); color: var(--ink); min-height: 48px }
+.faq summary::-webkit-details-marker { display: none }
+.faq summary::after { content: "+"; position: absolute; right: 4px; top: 14px; color: var(--gold); font: 400 24px/1 var(--sans) }
+.faq details[open] summary::after { content: "−" }
+.faq details p { margin: 0 0 16px; color: var(--soft); max-width: 62ch }
+.deeper { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 10px; margin-top: 6px }
+.deeper a { display: block; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.02); color: var(--ink); text-decoration: none; min-width: 0 }
+.deeper a:hover { border-color: var(--gold); background: rgba(217,174,95,.06) }
+.deeper strong { display: block; font: 600 20px/1.2 var(--serif); color: var(--gold) }
+.deeper span { display: block; margin-top: 4px; font-size: 15px; color: var(--faint) }
+.credit { margin-top: 18px; font-size: 14px; color: var(--faint) }
+
 /* gallery */
 
 /* bottom space so the last names clear the phone's home bar */
@@ -191,6 +220,13 @@ main.wrap { padding-bottom: calc(56px + env(safe-area-inset-bottom)) }
   <section id="stuti" class="stuti">
     <h2>The full Stuti</h2>
     <p class="note">Chant 1, 3, 6, 9 or 11 times. Turn on meanings for a devotee's understanding of each name.</p>
+    <div class="video" id="chant-along">
+      <button type="button" id="vPlay" aria-label="Play the Linga Bhairavi Stuti chant-along video, 3 times with lyrics">
+        <img src="https://i.ytimg.com/vi/4RLgoS1H68c/hqdefault.jpg" alt="" loading="lazy" width="480" height="360">
+        <span class="play"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><path d="M0 0l14 8-14 8z" fill="currentColor"/></svg>Chant along · 3 times</span>
+      </button>
+    </div>
+    <p class="vcap">Video from Linga Bhairavi's official YouTube channel</p>
     <div class="sbar">
       <button type="button" id="sMean" aria-pressed="false">Show meanings</button>
       <button type="button" id="sSmaller" aria-label="Smaller text">A−</button>
@@ -245,6 +281,45 @@ main.wrap { padding-bottom: calc(56px + env(safe-area-inset-bottom)) }
         <p><span>Namah Shri Namah Shri</span> <span>Devi Namah Shri</span></p>
       </div>
 
+      <div class="langs">
+        <p>Lyrics in your language (PDF from Isha)</p>
+        <div class="chips">
+        <a href="https://public-isha.sadhguru.org/linga-bhairavi-stuti/english-stuti.pdf" target="_blank" rel="noopener" data-lang="english">English</a>
+        <a href="https://public-isha.sadhguru.org/linga-bhairavi-stuti/tamil-stuti.pdf" target="_blank" rel="noopener" data-lang="tamil">தமிழ் Tamil</a>
+        <a href="https://public-isha.sadhguru.org/linga-bhairavi-stuti/hindi-stuti.pdf" target="_blank" rel="noopener" data-lang="hindi">हिन्दी Hindi</a>
+        <a href="https://public-isha.sadhguru.org/linga-bhairavi-stuti/telugu-stuti.pdf" target="_blank" rel="noopener" data-lang="telugu">తెలుగు Telugu</a>
+        <a href="https://public-isha.sadhguru.org/linga-bhairavi-stuti/kannada-stuti.pdf" target="_blank" rel="noopener" data-lang="kannada">ಕನ್ನಡ Kannada</a>
+        <a href="https://public-isha.sadhguru.org/linga-bhairavi-stuti/malayalam-stuti.pdf" target="_blank" rel="noopener" data-lang="malayalam">മലയാളം Malayalam</a>
+        </div>
+      </div>
+  </section>
+
+
+  <div class="divider"></div>
+  <section id="how" class="faq">
+    <h2>How to chant</h2>
+    <p class="note">Simple answers for anyone starting out.</p>
+    <details><summary>Do I need to learn it by heart?</summary><p>No. Read along from this page or the lyrics PDF. The words settle in by themselves over time.</p></details>
+    <details><summary>How many times should I chant?</summary><p>1, 3, 6, 9 or 11 rounds. The video above chants it 3 times, so you can simply follow it.</p></details>
+    <details><summary>Should I chant every day?</summary><p>Daily chanting helps you become more receptive to Devi, even if it is just once.</p></details>
+    <details><summary>Where should I chant?</summary><p>In front of Devi's photo, a Devi Mukha, a Devi Gudi or a Linga Bhairavi Yantra is supportive. Anywhere quiet will do.</p></details>
+    <details><summary>Can children chant it?</summary><p>Yes. There is no age limit; anyone can learn it.</p></details>
+    <details><summary>Do I need an empty stomach?</summary><p>No, you can chant at any time.</p></details>
+    <details><summary>What about Devi Dandam?</summary><p>If you do Devi Dandam, do it first, then chant the Stuti.</p></details>
+  </section>
+
+  <div class="divider"></div>
+  <section id="deeper">
+    <h2>Go deeper with Isha</h2>
+    <p class="note">Practices offered by Isha for Linga Bhairavi. These open Isha's own pages.</p>
+    <div class="deeper">
+      <a href="https://isha.sadhguru.org/linga-bhairavi/in/en/sadhana/devi-dandam" target="_blank" rel="noopener"><strong>Devi Dandam</strong><span>A posture for receptivity to Devi</span></a>
+      <a href="https://isha.sadhguru.org/linga-bhairavi/in/en/sadhana/linga-bhairavi-arati" target="_blank" rel="noopener"><strong>Linga Bhairavi Arati</strong><span>An offering of fire to Devi</span></a>
+      <a href="https://isha.sadhguru.org/linga-bhairavi/in/en/sadhana/bhairavi-sadhana-arpanam" target="_blank" rel="noopener"><strong>Bhairavi Sadhana</strong><span>A simple sadhana of devotion</span></a>
+      <a href="https://isha.sadhguru.org/linga-bhairavi/in/en/sadhana/navratri-sadhana" target="_blank" rel="noopener"><strong>Navratri Sadhana</strong><span>Sadhguru's 9-day guided sadhana</span></a>
+      <a href="https://isha.sadhguru.org/linga-bhairavi/in/en/sadhana/achala-arpanam" target="_blank" rel="noopener"><strong>Achala Arpanam</strong><span>A sadhana to enhance receptivity</span></a>
+      <a href="https://isha.sadhguru.org/linga-bhairavi/in/en/sadhana/linga-bhairavi-stuti" target="_blank" rel="noopener"><strong>The Stuti on Isha's site</strong><span>Isha's official Stuti page</span></a>
+    </div>
   </section>
 
   <div class="divider"></div>
@@ -404,6 +479,19 @@ if (m && +m[1] >= 1 && +m[1] <= 20) {
   try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
   open(+m[1] - 1);
 }
+
+// chant-along video: swap the thumbnail for the YouTube player only when tapped
+document.getElementById("vPlay").addEventListener("click", () => {
+  const f = document.createElement("iframe");
+  f.src = "https://www.youtube-nocookie.com/embed/4RLgoS1H68c?autoplay=1&rel=0&playsinline=1";
+  f.title = "Linga Bhairavi Stuti, 3 times, with lyrics";
+  f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen"; f.allowFullscreen = true;
+  document.getElementById("chant-along").replaceChildren(f);
+  gtag("event", "video_play", {from: "chant_along"});
+});
+document.querySelectorAll(".chips a").forEach(a => a.addEventListener("click", () => gtag("event", "lyrics_pdf_click", {state: a.dataset.lang})));
+document.querySelectorAll(".deeper a").forEach(a => a.addEventListener("click", () => gtag("event", "isha_link_click", {title: a.querySelector("strong").textContent})));
+document.querySelectorAll(".faq details").forEach(d => d.addEventListener("toggle", () => d.open && gtag("event", "faq_open", {title: d.querySelector("summary").textContent})));
 </script>
 </body>
 </html>
